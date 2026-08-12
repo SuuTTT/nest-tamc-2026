@@ -1,0 +1,41 @@
+\section{Related Work}
+\paragraph{Structural entropy and hierarchy construction.}
+Li and Pan introduced structural information as an encoding-tree measure of
+network organization \cite{li2016}. HCSE and BBM develop hierarchy
+construction and balancing operations for this objective \cite{pan2025}.
+SuperTAD proves binary sufficiency and uses it in contiguity-constrained dynamic
+programs \cite{zhang2021supertad}; HCSE also notes the property \cite{pan2025}.
+Our exact audit instead optimizes arbitrary vertex subsets.
+The structural-entropy survey organizes the broader theory, optimization, and
+application literature \cite{su2025survey}.
+\NEST asks whether a returned tree is locally optimal under an exact topology
+rotation and uses the answer as both a diagnostic and an optimizer.
+
+\paragraph{Graph hierarchical clustering.}
+Paris supplies an inexpensive agglomerative graph hierarchy related to
+modularity \cite{bonald2018paris}. Louvain optimizes modularity
+\cite{blondel2008}; we score its final partition as a two-level tree.
+Dasgupta's cost and its revenue dual have inspired hierarchical algorithms with
+guarantees \cite{dasgupta2016,moseley2017}. Because these objectives differ
+from structural entropy, optimizing Eq.~\eqref{eq:tree-se} requires its own
+local identity.
+
+\paragraph{Exact inference and heuristic accuracy.}
+Cluster trellises support exact hierarchical inference \cite{macaluso2021}.
+Our routine is an SE specialization:
+the prior binary-sufficiency property justifies the subset recurrence, while
+our arbitrary-subset formulation differs from SuperTAD's contiguity-constrained
+dynamic programs.
+
+\paragraph{Local search in tree space.}
+NNI is a classical neighborhood for evolutionary, or phylogenetic, trees; its
+reconfiguration distance is itself nontrivial \cite{litrompzhang1996}. Recent
+work studies NNI local search for hierarchical-clustering costs
+\cite{jowhari2024}. PERCH uses purity-enhancing rotations during online tree
+construction, while GRINCH combines rotations with longer-range grafts for
+general linkage functions \cite{kobren2017perch,monath2019grinch}. Our formula
+instead targets weighted graph structural entropy and exposes the two
+cross-module weights controlling an NNI rotation. Unlike unit-clique landscape
+analyses, our method evaluates the complete objective on arbitrary weighted
+graphs. Its new content is the verified optimizer, compound search, multi-start
+construction, comparative evaluation, and exact global audit.

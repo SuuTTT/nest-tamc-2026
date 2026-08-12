@@ -1,0 +1,200 @@
+\section{NNI-Certified Entropy Search}
+\NEST builds several initial hierarchies, improves each through NNI rotations,
+and returns the tree with the lowest structural entropy. Equation~\eqref{eq:nni-delta}
+scores every candidate rotation exactly, while a full recomputation of
+Eq.~\eqref{eq:tree-se} checks every accepted tree. An exact dynamic program
+supplies the global optimum for the small-graph audits.
+
+\subsection{A local structural-entropy identity}
+For disjoint sets $X,Y$, write
+$W(X,Y)=\sum_{u\in X,v\in Y}w_{uv}$. Consider the rotation shown in
+Fig.~\ref{fig:nni}. The disjoint subtrees $A,B,C$ fill their local parent
+$P=A\cup B\cup C$; the rotation replaces its child module $X=A\cup B$ with
+$Y=B\cup C$ while leaving the rest of the hierarchy unchanged.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  level distance=8mm,
+  every node/.style={font=\small},
+  internal/.style={circle,draw=black!55,fill=black!5,inner sep=1.7pt,
+                   line width=0.55pt},
+  module/.style={rounded corners=2pt,draw=black!55,minimum width=9mm,
+                 minimum height=5.5mm,line width=0.55pt},
+  edge from parent/.style={draw=black!65,-,line width=0.65pt}
+]
+\node[internal] (p1) at (0,0) {$P$};
+\node[internal] (x) at (-0.7,-0.8) {$X$};
+\node[module,fill=blue!12] (c1) at (0.7,-0.8) {$C$};
+\node[module,fill=cyan!13] (a1) at (-1.25,-1.65) {$A$};
+\node[module,fill=orange!18] (b1) at (-0.15,-1.65) {$B$};
+\draw (p1)--(x) (p1)--(c1) (x)--(a1) (x)--(b1);
+\draw[red!75!black,-{Latex[length=2mm,width=1.25mm]},line width=0.8pt]
+  (1.38,-0.8)--(2.62,-0.8);
+\node[text=red!75!black,font=\scriptsize\bfseries,anchor=south]
+  at (2.0,-0.72) {exact NNI};
+\node[text=black!60,font=\scriptsize] at (-0.7,-2.18) {$X=A\cup B$};
+\node[internal] (p2) at (4,0) {$P$};
+\node[module,fill=cyan!13] (a2) at (3.3,-0.8) {$A$};
+\node[internal] (y) at (4.7,-0.8) {$Y$};
+\node[module,fill=orange!18] (b2) at (4.15,-1.65) {$B$};
+\node[module,fill=blue!12] (c2) at (5.25,-1.65) {$C$};
+\draw (p2)--(a2) (p2)--(y) (y)--(b2) (y)--(c2);
+\node[text=black!60,font=\scriptsize] at (4.7,-2.18) {$Y=B\cup C$};
+\node[rounded corners=2pt,draw=blue!35,fill=blue!4,
+      minimum width=7.7cm,minimum height=5.5mm,font=\scriptsize]
+  at (2.0,-2.75)
+  {three volumes $V_X,V_Y,V_P$ + two cross weights $W(A,B),W(B,C)$
+   $\Longrightarrow$ verified $\Delta H^T$};
+\end{tikzpicture}
+\caption{A rooted NNI replaces only $X=A\cup B$ by $Y=B\cup C$. The
+highlighted local statistics determine the exact full-objective change; all
+leaves and the surrounding tree remain fixed.}
+\label{fig:nni}
+\end{figure}
+
+\begin{theorem}[Exact weighted NNI delta]\label{thm:delta}
+For an eligible rotation with $V_X,V_Y,V_P>0$, the change in tree structural
+entropy is
+\begin{equation}
+ \Delta \HT=
+ \frac{2}{\vol(V)}\left[
+ W(A,B)\log_2\frac{V_P}{V_X}+
+ W(B,C)\log_2\frac{V_Y}{V_P}
+ \right].
+ \label{eq:nni-delta}
+\end{equation}
+The symmetric alternative follows by exchanging $A$ and $B$.
+\end{theorem}
+
+\emph{Proof.} Deferred to \proofdetails.
+
+\begin{proposition}[Atomic advantage over merge--compress]
+\label{prop:atomic}
+Let $T_c$ contract the edge from $P$ to $X=A\cup B$, exposing $A,B,C$ as
+siblings, and let $T'$ then merge $B,C$ under $Y=B\cup C$. For these HCSE
+compress and merge primitives,
+\begin{align}
+ H^{T_c}(G)-H^T(G)
+ &=\frac{2W(A,B)}{\vol(V)}\log_2\frac{V_P}{V_X}\ge0,\label{eq:compress}\\
+ H^{T'}(G)-H^{T_c}(G)
+ &=-\frac{2W(B,C)}{\vol(V)}\log_2\frac{V_P}{V_Y}\le0.\label{eq:merge}
+\end{align}
+Their sum is Eq.~\eqref{eq:nni-delta}. Thus NNI lowers entropy when the merge
+gain in Eq.~\eqref{eq:merge} exceeds the compression loss in
+Eq.~\eqref{eq:compress}, although neither desired reparenting nor an improving
+compression is available as one primitive.
+\end{proposition}
+\emph{Proof.} Deferred to \proofdetails.
+
+This proves strict separation from monotone single-primitive search, not global
+dominance over a complete HCSE round, which may cross an intermediate increase.
+We evaluate Eq.~\eqref{eq:nni-delta} from cached sets and sparse adjacency lists,
+then verify every selected move by fully recomputing Eq.~\eqref{eq:tree-se}.
+
+\subsection{One-step certificate and compound escape}\label{sec:compound-search}
+\begin{algorithm}[H]
+\caption{Exact NNI refinement of one candidate tree}\label{alg:nni}
+\KwIn{Graph $G$, tree $T$, tolerance $\varepsilon$, barrier $\beta$, beam $b$}
+\Repeat{no improving one-step move exists}{
+  evaluate Eq.~\eqref{eq:nni-delta} for every legal NNI of $T$\;
+  apply the most negative move and verify the full objective\;
+}
+\For{at most $R$ compound rounds}{
+  retain the $b$ first moves with smallest $\Delta H$ and $\Delta H\le\beta$\;
+  expand every legal second NNI from each retained intermediate tree\;
+  \If{no two-move endpoint has entropy below $H^T(G)$}{break\;}
+  commit the best endpoint; rerun one-step descent\;
+}
+\Return{$T$}
+\end{algorithm}
+
+\begin{proposition}[Monotonicity and local certificate]\label{prop:local}
+One-step refinement never increases $\HT(G)$. If it stops before its move
+budget, the returned tree has no improving rooted NNI on any eligible binary
+parent--child edge.
+\end{proposition}
+\emph{Proof.} Deferred to \proofdetails.
+
+Strict one-step descent can stop before a better tree separated by a shallow
+barrier. Algorithm~\ref{alg:nni} therefore keeps a short list---a beam---of the
+$b$ most promising first moves whose increase is at most $\beta$, then evaluates
+a second NNI from each intermediate tree. It never commits the intermediate
+tree alone.
+
+\begin{proposition}[Safe compound search]\label{prop:compound}
+The compound stage never worsens its input. It can reach an improving endpoint
+even when every one-step neighbor is non-improving.
+\end{proposition}
+\emph{Proof.} Deferred to \proofdetails.
+
+\paragraph{A strict local trap.}
+A one-NNI certificate does not imply global optimality. On a fixed
+eight-vertex weighted instance, one-step descent terminates at a tree with
+entropy $1.970038$ bits because every legal NNI neighbor has a nonnegative
+objective change. Reaching a better tree requires first crossing a
+$0.013970$-bit barrier. A second rotation, followed by ordinary one-step
+descent, then reaches $1.920593$ bits, reducing the original objective by
+$0.049445$ bits. Thus the bounded two-move stage can leave a certified
+one-step local minimum, while the endpoint check ensures that \NEST commits
+only a tree with lower entropy. The complete instance and move sequence are
+included with the artifact and protected by a regression test.
+
+\subsection{Fast NNI-certified entropy search}
+\NEST applies Algorithm~\ref{alg:nni} independently to SE-agglomerative,
+recursive-SE, and Paris starts and returns the candidate with minimum verified
+entropy. The initializer is recorded for every output,
+so gains can be attributed to candidate selection, one-step refinement, and
+compound escape. With $n$ leaves there are at most $2(n-2)$ oriented NNI
+alternatives per sweep. Our implementation uses best improvement, cached leaf sets, sparse
+cross-weight scans, and an $O(m\log h+n)$ full verification only for a selected
+move, where $h$ is tree height. We make runtime claims empirically rather than
+assuming balanced trees.
+
+\paragraph{Randomized basin coverage.}
+\NEST-R adds $q$ coalescent starts, each built by repeatedly merging two
+uniformly selected current components, then applies the same NNI routine. The
+distribution is not uniform over labeled topologies. Selection uses only
+rescored entropy; increasing $q$ cannot worsen the result, and its global-hit
+rate is measured against exact optima below.
+
+\subsection{Exact global audit on small graphs}
+To measure how often certified endpoints coincide with global optima, we use a
+separate exact solver. SuperTAD proves binary sufficiency for general graphs,
+and HCSE also notes it \cite{zhang2021supertad,pan2025}; we restate the result
+to make the audit self-contained.
+
+\begin{proposition}[Binary sufficiency]\label{prop:binary}
+Every encoding tree has a binary refinement whose structural entropy is no
+greater. Consequently, a global minimum exists among rooted binary trees.
+\end{proposition}
+\emph{Proof.} Included for completeness in \proofdetails.
+
+For a nonempty vertex subset $S$, let $F(S)$ be the minimum contribution of a
+binary subtree rooted at $S$, excluding the edge from $S$ to its parent. Then
+\begin{equation}
+\begin{split}
+F(\{v\})&=0,\\
+F(S)&=\min_{A\dot\cup B=S}\left\{F(A)+F(B)
+-\frac{g_A}{\vol(V)}\log_2\frac{V_A}{V_S}
+-\frac{g_B}{\vol(V)}\log_2\frac{V_B}{V_S}\right\}.
+\end{split}\label{eq:exact-dp}
+\end{equation}
+Enumerating each unordered split once gives $O(3^n)$ time and $O(2^n)$ memory,
+an SE-specific subset dynamic program, equivalently a trellis whose states are
+vertex subsets \cite{macaluso2021}.
+By Proposition~\ref{prop:binary}, $F(V)$ is the global minimum over all encoding
+trees, not only over the binary subclass. The exact audits apply this routine at
+$n=12,14,16$; the deployable \NEST algorithm does not invoke it.
+
+For an additional graph-only certificate, an edge-LCA expansion gives
+\begin{equation}
+H^T(G)=\sum_{uv\in E}\frac{w_{uv}}{\vol(V)}
+\log_2\frac{V_{\operatorname{lca}(u,v)}^2}{d_ud_v}
+\ge \sum_{uv\in E}\frac{w_{uv}}{\vol(V)}
+\log_2\frac{(d_u+d_v)^2}{d_ud_v}.
+\label{eq:edge-bound}
+\end{equation}
+The inequality follows from
+$V_{\operatorname{lca}(u,v)}\ge d_u+d_v$. It is a universal lower bound, but
+the exact dynamic program gives the sharper certificates reported below.

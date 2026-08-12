@@ -1,0 +1,13 @@
+\section{Conclusion}
+We introduced \NEST, which derives an exact weighted NNI identity and uses it
+for monotone refinement, a local-optimality certificate, and safe bounded
+escape from shallow one-step traps. On the frozen five-regime suite, \NEST
+achieved the lowest mean entropy in every regime and outperformed both HCSE and
+BBM on all 500 paired graphs. Prior binary sufficiency together with our exact
+arbitrary-subset dynamic program shows that 32-start \NEST reaches the global
+optimum on \ScaleCombinedExact{} sealed instances across $n=12,14,16$, versus
+2/375 for HCSE and 1/375 for label-free BBM. The operator audit further shows
+that hierarchy construction, local certification, and exact optimality provide
+complementary views of search quality. Together, the local identity, certified
+search, and exact audit form a reproducible framework for optimizing
+structural-entropy hierarchies.

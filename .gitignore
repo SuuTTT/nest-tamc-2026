@@ -1,0 +1,16 @@
+__pycache__/
+.pytest_cache/
+.venv/
+*.py[cod]
+.DS_Store
+
+# LaTeX build intermediates. Canonical review/submission artifacts live in submission/.
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.spl
+*.synctex.gz

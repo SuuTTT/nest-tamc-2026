@@ -1,0 +1,202 @@
+"""selib.segnn — attribute-aware SE: differentiable soft 2D structural entropy + a
+tiny GCN encoder. Ported from the author's glass-jax prototype (objectives/
+structural_entropy.py + models/gnn_se.py), with flax/optax replaced by pure jax +
+a hand-rolled Adam so the only optional dependency is `jax` (CPU build is fine).
+
+Pipeline: node features X (from G.graph["X"]; identity if absent) and adjacency A
+-> logits = (ReLU(A @ (X W1 + b1))) W2 + b2 -> S = softmax(logits) -> minimize the
+soft H^2(A, S) by gradient descent -> hard labels = argmax S.
+
+The soft objective uses the identity (sum_i S_ji = 1):
+  H^2 = -sum_k (g_k/2m) log2(V_k/2m)  +  H_1(G) + sum_k (V_k/2m) log2(V_k/2m)
+so at a one-hot S it equals the canonical 2D-SE *exactly* (checked in __main__).
+"""
+from __future__ import annotations
+import numpy as np
+import networkx as nx
+
+
+def _require_jax():
+    try:
+        import jax  # noqa: F401
+        return True
+    except Exception as e:
+        raise RuntimeError(
+            "se_gnn needs jax (CPU is fine): pip install jax  — " + str(e))
+
+
+def soft_se2d(A, S, eps=1e-9):
+    """Differentiable 2D structural entropy of soft assignment S (N,K). jax arrays."""
+    import jax.numpy as jnp
+    d = jnp.sum(A, axis=-1)
+    two_m = jnp.sum(d)
+    V = jnp.dot(d, S)                              # (K,) module volumes
+    AS = jnp.dot(A, S)
+    g = jnp.sum(S * (d[:, None] - AS), axis=0)     # (K,) module cuts
+    p_vol = V / (two_m + eps)
+    p_cut = g / (two_m + eps)
+    term1 = -jnp.sum(p_cut * jnp.log2(jnp.clip(p_vol, eps, 1.0)))
+    p = jnp.clip(d / (two_m + eps), eps, 1.0)
+    h1 = -jnp.sum(p * jnp.log2(p))                 # 1D SE (constant in S)
+    term2 = h1 + jnp.sum(p_vol * jnp.log2(jnp.clip(p_vol, eps, 1.0)))
+    return term1 + term2
+
+
+def sinkhorn_head(logits, n_iter=15, tau=1.0):
+    """Balanced soft assignment via log-space Sinkhorn: rows sum to 1 (a
+    distribution per node) and column masses are pushed toward N/K (uniform
+    cluster sizes), which prevents the softmax head's cluster collapse.
+    Differentiable; hand-rolled so no ott-jax dependency. Ported in spirit from
+    the author's glass-jax src/glass/solvers/sinkhorn.py (uniform marginals)."""
+    import jax.numpy as jnp
+    from jax.scipy.special import logsumexp
+    N, K = logits.shape
+    logP = logits / tau
+    log_col_target = jnp.log(jnp.asarray(N / K, dtype=logits.dtype))
+    for _ in range(n_iter):
+        logP = logP - logsumexp(logP, axis=1, keepdims=True)               # rows -> 1
+        logP = logP - logsumexp(logP, axis=0, keepdims=True) + log_col_target  # cols -> N/K
+    logP = logP - logsumexp(logP, axis=1, keepdims=True)                   # final: rows -> 1
+    return jnp.exp(logP)
+
+
+def _normalize_adj(A):
+    """Symmetric GCN normalization: A_hat = D^-1/2 (A + I) D^-1/2 (numpy)."""
+    A = A + np.eye(A.shape[0], dtype=A.dtype)
+    d = A.sum(axis=1)
+    dinv = 1.0 / np.sqrt(np.maximum(d, 1e-12))
+    return (A * dinv[:, None]) * dinv[None, :]
+
+
+def se_gnn_fit(A, X, k, seed=0, hidden=64, iters=300, lr=0.01, layers=2,
+               head="softmax", dropout=0.0):
+    """Train the GCN (`layers` propagation steps over the normalized adjacency) to
+    minimize soft H^2 of the ORIGINAL graph; return (labels, final_loss).
+
+    The encoder sees A_hat (normalized, self-loops) — standard GCN practice — but
+    the loss is always the structural entropy of the raw A, so the objective stays
+    exactly the canonical one. `dropout` masks input features during training only."""
+    _require_jax()
+    import jax
+    import jax.numpy as jnp
+    A_raw = jnp.asarray(A, dtype=jnp.float32)
+    A_hat = jnp.asarray(_normalize_adj(np.asarray(A, dtype="float32")))
+    X_ = jnp.asarray(X, dtype=jnp.float32)
+    D = X_.shape[1]
+    key = jax.random.PRNGKey(seed)
+    dims = [D] + [hidden] * (layers - 1) + [k]
+    params = {}
+    for i in range(layers):
+        key, sub = jax.random.split(key)
+        params[f"W{i}"] = jax.random.normal(sub, (dims[i], dims[i + 1])) * jnp.sqrt(2.0 / dims[i])
+        params[f"b{i}"] = jnp.zeros(dims[i + 1])
+
+    def forward(p, h, dkey):
+        for i in range(layers):
+            if dropout > 0 and dkey is not None and i == 0:
+                mask = (jax.random.uniform(dkey, h.shape) > dropout).astype(h.dtype)
+                h = h * mask / (1.0 - dropout)
+            h = jnp.dot(A_hat, jnp.dot(h, p[f"W{i}"]) + p[f"b{i}"])
+            if i < layers - 1:
+                h = jnp.maximum(h, 0.0)
+        return h                                     # logits (N, k)
+
+    def assign(logits):
+        if head == "sinkhorn":
+            return sinkhorn_head(logits)
+        return jax.nn.softmax(logits, axis=-1)
+
+    def loss_fn(p, dkey):
+        return soft_se2d(A_raw, assign(forward(p, X_, dkey)))
+
+    grad_fn = jax.jit(jax.value_and_grad(loss_fn))
+    # hand-rolled Adam (keeps optax out of the deps)
+    m = {kk: jnp.zeros_like(v) for kk, v in params.items()}
+    v = {kk: jnp.zeros_like(vv) for kk, vv in params.items()}
+    b1, b2, ae = 0.9, 0.999, 1e-8
+    loss = None
+    for t in range(1, iters + 1):
+        dkey = None
+        if dropout > 0:
+            key, dkey = jax.random.split(key)
+        loss, g = grad_fn(params, dkey)
+        for kk in params:
+            m[kk] = b1 * m[kk] + (1 - b1) * g[kk]
+            v[kk] = b2 * v[kk] + (1 - b2) * g[kk] ** 2
+            mh = m[kk] / (1 - b1 ** t)
+            vh = v[kk] / (1 - b2 ** t)
+            params[kk] = params[kk] - lr * mh / (jnp.sqrt(vh) + ae)
+    labels = np.asarray(jax.numpy.argmax(assign(forward(params, X_, None)), axis=-1))
+    return labels, float(loss)
+
+
+def se_gnn(G, k=None, seed=0, hidden=64, iters=300, lr=0.01, layers=2, starts=3,
+           head=None, dropout=0.0):
+    """Attribute-aware SE community detection. Features are read from
+    G.graph["X"] (numpy array aligned with list(G.nodes())); identity features are
+    used if absent (featureless mode = learnable per-node embedding).
+    `k` is the number of communities (required in spirit; defaults to 8).
+    Runs `starts` restarts and keeps the lowest final soft-SE (objective-selected,
+    no label peeking)."""
+    nodes = list(G.nodes())
+    n = len(nodes)
+    A = nx.to_numpy_array(G, nodelist=nodes, weight="weight").astype("float32")
+    X = G.graph.get("X")
+    if X is None:
+        X = np.eye(n, dtype="float32")
+    X = np.asarray(X, dtype="float32")
+    rs = X.sum(axis=1, keepdims=True)               # row-normalize features
+    X = X / np.maximum(rs, 1e-12)
+    import os
+    # sinkhorn (balanced-assignment) is the default: it fixes the softmax head's
+    # cluster collapse and wins on every attributed metric (see benchmark page)
+    head = head or os.environ.get("SELIB_SEGNN_HEAD", "sinkhorn")
+    best = None
+    for s in range(starts):
+        labels, loss = se_gnn_fit(A, X, int(k or 8), seed=seed * 100 + s,
+                                  hidden=hidden, iters=iters, lr=lr, layers=layers,
+                                  head=head, dropout=dropout)
+        if best is None or loss < best[0]:
+            best = (loss, labels)
+    return [int(x) for x in best[1]]
+
+
+# ----------------------------- self-tests -----------------------------------
+def _selftest():
+    import random
+    from . import metrics as M
+    _require_jax()
+    import jax.numpy as jnp
+    random.seed(0)
+
+    print("== soft H^2 at one-hot S == canonical 2D-SE ==")
+    for gi, G in enumerate([nx.karate_club_graph(),
+                            nx.gnp_random_graph(40, 0.15, seed=1),
+                            nx.connected_caveman_graph(4, 6)]):
+        G = nx.convert_node_labels_to_integers(G)
+        n = G.number_of_nodes()
+        labels = [random.randrange(4) for _ in range(n)]
+        A = nx.to_numpy_array(G).astype("float32")
+        S = np.zeros((n, 4), dtype="float32")
+        for i, l in enumerate(labels):
+            S[i, l] = 1.0
+        soft = float(soft_se2d(jnp.asarray(A), jnp.asarray(S)))
+        hard = M.structural_entropy_2d(G, labels)
+        ok = abs(soft - hard) < 1e-4
+        print(f"  graph{gi}: soft={soft:.6f} canonical={hard:.6f} {'OK' if ok else 'MISMATCH'}")
+        assert ok
+
+    print("== training reduces soft H^2 (Karate, identity features) ==")
+    G = nx.convert_node_labels_to_integers(nx.karate_club_graph())
+    A = nx.to_numpy_array(G).astype("float32")
+    X = np.eye(G.number_of_nodes(), dtype="float32")
+    _, l_short = se_gnn_fit(A, X, k=2, seed=0, iters=1)
+    _, l_full = se_gnn_fit(A, X, k=2, seed=0, iters=200)
+    print(f"  loss iter1={l_short:.4f} -> iter200={l_full:.4f} "
+          f"{'OK' if l_full < l_short - 1e-6 else 'NO-DECREASE'}")
+    assert l_full < l_short - 1e-6
+    print("ALL SEGNN SELFTESTS PASSED")
+
+
+if __name__ == "__main__":
+    _selftest()
