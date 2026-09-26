@@ -66,16 +66,15 @@ def write_main_table(records, output: Path):
     best = {regime: min(means[(regime, method)][0] for method in METHODS)
             for regime in REGIMES}
     lines = [
-        r"\begin{table}[H]",
+        r"\begin{table}[t]",
         r"\centering\small",
         r"\caption{Mean tree structural entropy $H^T$ (bits) on 100 paired graphs per",
         r"HSBM regime. The $\pm$ value is a 95\% $t$-interval over graph seeds; lower is",
         r"better, and bold marks the lowest column mean. BBM$^\dagger$ receives the",
         r"planted fine-cluster count; the other methods do not use labels.}",
         r"\label{tab:main-h}",
-        r"\setlength{\tabcolsep}{3.2pt}",
-        r"\resizebox{\textwidth}{!}{%",
-        r"\begin{tabular}{lccccc}",
+        r"\setlength{\tabcolsep}{0pt}",
+        r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lccccc@{}}",
         r"\toprule",
         r"Method & Clean & Noisy & Imbalanced & Weighted & \shortstack{Weak\\hierarchy} \\",
         r"\midrule",
@@ -86,12 +85,12 @@ def write_main_table(records, output: Path):
         cells = []
         for regime in REGIMES:
             mean, ci = means[(regime, method)]
-            cell = f"{mean:.3f} $\\pm$ {ci:.3f}"
+            cell = f"{mean:.3f}\\,{{\\scriptsize$\\pm${ci:.3f}}}"
             if abs(mean - best[regime]) < 1e-10:
                 cell = r"\textbf{" + cell + "}"
             cells.append(cell)
         lines.append(LABELS[method] + " & " + " & ".join(cells) + r" \\")
-    lines.extend([r"\bottomrule", r"\end{tabular}%", r"}", r"\end{table}"])
+    lines.extend([r"\bottomrule", r"\end{tabular*}", r"\end{table}"])
     output.write_text("\n".join(lines) + "\n")
 
 
@@ -153,7 +152,7 @@ def write_exact_table(legacy_path: Path, root: Path, output: Path):
         (16, json.loads((root / "exact16.json").read_text())),
     ]
     lines = [
-        r"\begin{table}[H]",
+        r"\begin{table}[t]",
         r"\centering\small",
         r"\caption{Sealed exact-optimum audit on independently generated HSBMs with $n$",
         r"vertices and 32 candidates per method: coalescent starts for \NEST, target",
@@ -255,7 +254,7 @@ def figure_entropy(records, output_dir: Path):
             for seed in seeds
         ])
 
-    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.45), gridspec_kw={"width_ratios": [0.95, 1.18]})
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.0), gridspec_kw={"width_ratios": [0.95, 1.18]})
     y = np.arange(len(REGIMES))
     means = [mean_ci(margins[regime]) for regime in REGIMES]
     axes[0].axvspan(0, 0.8, color=COLORS["blue_light"], alpha=0.55, zorder=0)
@@ -308,10 +307,9 @@ def figure_entropy(records, output_dir: Path):
     )
     style_axis(axes[1])
 
-    fig.suptitle("NEST improves over the stronger external SE baseline on 500/500 graphs",
-                 fontsize=11.2, y=0.985)
+    # The caption carries the headline; an in-figure title only costs height.
     sns.despine(fig=fig, left=True, bottom=True)
-    fig.tight_layout(rect=[0, 0.02, 1, 0.93], w_pad=1.3)
+    fig.tight_layout(rect=[0, 0.02, 1, 1], w_pad=1.3)
     output_dir.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_dir / "benchmark_entropy.pdf", dpi=300, bbox_inches="tight")
     fig.savefig(output_dir / "benchmark_entropy.png", dpi=300, bbox_inches="tight")
@@ -329,7 +327,7 @@ def figure_operator(records, output_dir: Path):
         one.append(100 * np.mean([row["nni1_gain"] > 1e-10 for row in rows]))
         two.append(100 * np.mean([row["nni2_extra_gain"] > 1e-10 for row in rows]))
     fig, axes = plt.subplots(
-        1, 2, figsize=(7.2, 3.50),
+        1, 2, figsize=(7.2, 3.05),
         gridspec_kw={"width_ratios": [1.0, 1.18]},
     )
     y = np.arange(len(methods))
@@ -416,12 +414,8 @@ def figure_operator(records, output_dir: Path):
     style_axis(axes[1])
     axes[1].patch.set_edgecolor("lightgrey")
     axes[1].patch.set_linewidth(0.8)
-    fig.suptitle(
-        "What NNI refinement changes, and what initial constructors leave behind",
-        fontsize=11.0, y=0.985,
-    )
     sns.despine(fig=fig, left=True, bottom=True)
-    fig.tight_layout(rect=[0, 0.02, 1, 0.93], w_pad=1.4)
+    fig.tight_layout(rect=[0, 0.02, 1, 1], w_pad=1.4)
     output_dir.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_dir / "operator_runtime.pdf", dpi=300, bbox_inches="tight")
     fig.savefig(output_dir / "operator_runtime.png", dpi=300, bbox_inches="tight")

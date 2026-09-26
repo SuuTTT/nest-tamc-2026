@@ -1,4 +1,12 @@
-\section{Conclusion}
+\section{Limitations and Conclusion}
+NNI is a local operator, and its certificate is not one of global optimality.
+The two-move escape explores a bounded neighborhood, and multiway regions must
+be resolved by a constructor before binary rotations can act on them. Lower
+entropy raised planted purity on average but not on every graph, and no
+coalescent restart recovered the strict planted tree in the exact and sampled
+basin audits at $n=5$--$8$ and $n=12$. The exact solver is exponential, so the
+near-optimality measurements cover only the declared 12--16-vertex suites.
+
 We introduced \NEST, which derives an exact weighted NNI identity and uses it
 for monotone refinement, a local-optimality certificate, and safe bounded
 escape from shallow one-step traps. On the frozen five-regime suite, \NEST
@@ -6,8 +14,11 @@ achieved the lowest mean entropy in every regime and outperformed both HCSE and
 BBM on all 500 paired graphs. Prior binary sufficiency together with our exact
 arbitrary-subset dynamic program shows that 32-start \NEST reaches the global
 optimum on \ScaleCombinedExact{} sealed instances across $n=12,14,16$, versus
-2/375 for HCSE and 1/375 for label-free BBM. The operator audit further shows
-that hierarchy construction, local certification, and exact optimality provide
-complementary views of search quality. Together, the local identity, certified
-search, and exact audit form a reproducible framework for optimizing
-structural-entropy hierarchies.
+2/375 for HCSE and 1/375 for label-free BBM; this does not imply global
+optimality beyond the audited suites. The operator audit shows that
+construction quality and local certification are complementary views of
+search quality.
+
+\paragraph{Code and data availability.}
+The implementation, sealed per-graph records, verifiers, and table generators
+are available at \url{https://github.com/SuuTTT/nest-tamc-2026}.

@@ -1,8 +1,8 @@
 \section{Proof Details and Additional Basin Analysis}\label{app:proofs}
 
-This appendix is included in the single review PDF. It supplies proofs omitted
-from the 12-page main paper and additional finite-instance evidence; none of its
-claims is needed to interpret the main experimental tables.
+This appendix supplies proofs omitted from the 12-page main paper, the
+component ablation, and additional finite-instance evidence; none of its claims
+is needed to interpret the main experimental tables.
 
 \paragraph{Proof of Theorem~\ref{thm:delta}.}
 First suppose the three child modules have positive volume; the zero-volume
@@ -36,8 +36,10 @@ calculation for inserting $Y$ gives Eq.~\eqref{eq:merge}.
 
 \paragraph{Proof of Proposition~\ref{prop:local}.}
 Only moves with $\Delta\HT<-\varepsilon$ are committed, and their endpoint is
-independently verified. At termination every enumerated legal move has
-$\Delta\HT\ge-\varepsilon$.
+independently verified, so the objective never increases. The loop exits only
+when the best enumerated move has $\Delta\HT\ge-\varepsilon$ or after $M$
+moves; in the first case every legal move on an eligible binary parent--child
+edge has $\Delta\HT\ge-\varepsilon$.
 
 \paragraph{Proof of Proposition~\ref{prop:compound}.}
 A pair is committed only after its final tree is fully recomputed and found to
@@ -104,3 +106,41 @@ This strict event is stronger than dendrogram purity and exposes objective--
 recovery misalignment on these small realized HSBMs. Thus the restart evidence
 supports optimization of $H^T$, not a claim that every entropy optimum equals
 the generator's planted hierarchy.
+
+\paragraph{Component ablation.}
+Table~\ref{tab:ablation} gives the cumulative ablation summarized in
+Section~\ref{sec:experiments}.
+
+\input{tables/ablation}
+
+\paragraph{Refinement runtime.}
+Figure~\ref{fig:runtime} complements Table~\ref{tab:operator} with the
+quality--time trade-off of each initializer.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.94\textwidth]{figures/operator_runtime.pdf}
+  \caption{NNI refinement over 500 graphs. (a) Blue is the fraction of initial
+  trees improved by repeated best-decreasing NNI moves. After no single move
+  helps, the two-move escape may cross one uphill intermediate tree; orange is
+  the fraction whose final endpoint improves further. (b) Each point is an
+  initializer. Excess entropy is
+  $100(H^T-H^T_{\mathrm{best}})/H^T_{\mathrm{best}}$, where
+  $H^T_{\mathrm{best}}$ is the lowest value on the same graph; thus zero is
+  best. The horizontal axis is mean construction time in log seconds, so
+  lower-left is better. Times include Python allocation tracing.}
+  \label{fig:runtime}
+\end{figure}
+
+\paragraph{A graph-only lower bound.}
+For an additional graph-only certificate, an edge-LCA expansion gives
+\begin{equation}
+H^T(G)=\sum_{uv\in E}\frac{w_{uv}}{\vol(V)}
+\log_2\frac{V_{\operatorname{lca}(u,v)}^2}{d_ud_v}
+\ge \sum_{uv\in E}\frac{w_{uv}}{\vol(V)}
+\log_2\frac{(d_u+d_v)^2}{d_ud_v}.
+\label{eq:edge-bound}
+\end{equation}
+The inequality follows from
+$V_{\operatorname{lca}(u,v)}\ge d_u+d_v$. It is a universal lower bound, but
+the exact dynamic program gives the sharper certificates reported below.

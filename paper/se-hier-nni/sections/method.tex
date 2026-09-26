@@ -1,18 +1,18 @@
 \section{NNI-Certified Entropy Search}
 \NEST builds several initial hierarchies, improves each through NNI rotations,
-and returns the tree with the lowest structural entropy. Equation~\eqref{eq:nni-delta}
-scores every candidate rotation exactly, while a full recomputation of
+and returns the tree with the lowest structural entropy. The local identity
+of Section~\ref{sec:identity} scores every candidate rotation exactly, while a full recomputation of
 Eq.~\eqref{eq:tree-se} checks every accepted tree. An exact dynamic program
 supplies the global optimum for the small-graph audits.
 
-\subsection{A local structural-entropy identity}
+\subsection{A local structural-entropy identity}\label{sec:identity}
 For disjoint sets $X,Y$, write
 $W(X,Y)=\sum_{u\in X,v\in Y}w_{uv}$. Consider the rotation shown in
 Fig.~\ref{fig:nni}. The disjoint subtrees $A,B,C$ fill their local parent
 $P=A\cup B\cup C$; the rotation replaces its child module $X=A\cup B$ with
 $Y=B\cup C$ while leaving the rest of the hierarchy unchanged.
 
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \begin{tikzpicture}[
   level distance=8mm,
@@ -93,28 +93,33 @@ We evaluate Eq.~\eqref{eq:nni-delta} from cached sets and sparse adjacency lists
 then verify every selected move by fully recomputing Eq.~\eqref{eq:tree-se}.
 
 \subsection{One-step certificate and compound escape}\label{sec:compound-search}
-\begin{algorithm}[H]
+\begin{algorithm}[t]
 \caption{Exact NNI refinement of one candidate tree}\label{alg:nni}
-\KwIn{Graph $G$, tree $T$, tolerance $\varepsilon$, barrier $\beta$, beam $b$}
-\Repeat{no improving one-step move exists}{
+\KwIn{Graph $G$, tree $T$, tolerance $\varepsilon$, move budget
+$M$, barrier $\beta$, beam $b$, compound rounds $R$}
+\Repeat{every legal NNI has $\Delta H\ge-\varepsilon$, or $M$ moves were applied}{
   evaluate Eq.~\eqref{eq:nni-delta} for every legal NNI of $T$\;
   apply the most negative move and verify the full objective\;
 }
 \For{at most $R$ compound rounds}{
   retain the $b$ first moves with smallest $\Delta H$ and $\Delta H\le\beta$\;
   expand every legal second NNI from each retained intermediate tree\;
-  \If{no two-move endpoint has entropy below $H^T(G)$}{break\;}
+  \If{no two-move endpoint has entropy below $H^T(G)-\varepsilon$}{break\;}
   commit the best endpoint; rerun one-step descent\;
 }
 \Return{$T$}
 \end{algorithm}
 
 \begin{proposition}[Monotonicity and local certificate]\label{prop:local}
-One-step refinement never increases $\HT(G)$. If it stops before its move
-budget, the returned tree has no improving rooted NNI on any eligible binary
-parent--child edge.
+One-step refinement never increases $\HT(G)$. If it stops before applying $M$
+moves, every rooted NNI on an eligible binary parent--child edge of the
+returned tree has $\Delta\HT\ge-\varepsilon$: the tree is
+$\varepsilon$-locally optimal. With $\varepsilon=0$ in exact arithmetic, no
+improving rooted NNI remains.
 \end{proposition}
 \emph{Proof.} Deferred to \proofdetails.
+We use $\varepsilon=10^{-10}$ bits, a floating-point tolerance, $M=100$, and
+the exact identity of Theorem~\ref{thm:delta}.
 
 Strict one-step descent can stop before a better tree separated by a shallow
 barrier. Algorithm~\ref{alg:nni} therefore keeps a short list---a beam---of the
@@ -145,11 +150,41 @@ included with the artifact and protected by a regression test.
 recursive-SE, and Paris starts and returns the candidate with minimum verified
 entropy. The initializer is recorded for every output,
 so gains can be attributed to candidate selection, one-step refinement, and
-compound escape. With $n$ leaves there are at most $2(n-2)$ oriented NNI
-alternatives per sweep. Our implementation uses best improvement, cached leaf sets, sparse
-cross-weight scans, and an $O(m\log h+n)$ full verification only for a selected
-move, where $h$ is tree height. We make runtime claims empirically rather than
-assuming balanced trees.
+compound escape.
+
+\paragraph{Binary and multiway trees.}
+SE agglomeration, Paris, and coalescent starts are binary; recursive SE, HCSE,
+BBM, and Louvain-2L may contain multiway nodes. We do not binarize them: NNI
+acts only on binary parent--child edges, so for a multiway tree the certificate
+of Proposition~\ref{prop:local} covers only those edges. Binarizing could only
+help, because grouping two children $A,B$ of a node $P$ under a new node $S$
+changes the entropy by $-2W(A,B)\log_2(V_P/V_S)/\vol(V)\le0$
+(Proposition~\ref{prop:binary}). In the 500-graph benchmark every tree returned
+by \NEST was binary (\CertFromAgg{} from SE agglomeration, \CertFromParis{} from
+Paris), and a direct check confirmed the $\varepsilon$-certificate on all
+\CertGraphs{} of them.
+
+\paragraph{Complexity.}
+With $n$ leaves there are at most $2(n-2)$ oriented NNI alternatives per sweep.
+Each delta needs two cross weights, obtained in $O(m)$ time by scanning the
+adjacency lists of the smaller module; cached leaf sets take $O(nh)$ space,
+where $h$ is tree height. A committed move is verified in $O(m\log h+n)$ time.
+One-step descent therefore costs $O(M\,n(m+h))$, and each compound round costs
+$O(b\,n(m\log h+n))$, because every retained first move is rescored and
+followed by a full second sweep. The total is
+$O\bigl((M+Rb)\,n(m\log h+n)\bigr)$ time and $O(nh+m)$ space per initializer.
+The budgets did not bind in the benchmark: the returned trees needed at most
+\CertMaxDescent{} descent moves ($M=100$) and \CertMaxCompound{} compound
+rounds ($R=8$).
+
+\paragraph{Parameters.}
+The largest barrier crossed by any accepted two-move escape was \MaxBarrier{}
+bits, well below $\beta=0.05$; on the 50-graph ablation subset,
+$\beta\in\{0.01,0.2\}$ and $R\in\{2,32\}$ left the result unchanged. The beam
+width is the only binding setting: $b=4$ raises mean entropy by \SensBFourLoss{}
+bits (\SensBFourHigher{} graphs worse), while $b=64$ lowers it by
+\SensBSixtyFourGain{} bits (\SensBSixtyFourLower{} graphs better), while the compound cost grows linearly
+in $b$. We keep $b=16$ as a compromise.
 
 \paragraph{Randomized basin coverage.}
 \NEST-R adds $q$ coalescent starts, each built by repeatedly merging two
@@ -187,14 +222,3 @@ By Proposition~\ref{prop:binary}, $F(V)$ is the global minimum over all encoding
 trees, not only over the binary subclass. The exact audits apply this routine at
 $n=12,14,16$; the deployable \NEST algorithm does not invoke it.
 
-For an additional graph-only certificate, an edge-LCA expansion gives
-\begin{equation}
-H^T(G)=\sum_{uv\in E}\frac{w_{uv}}{\vol(V)}
-\log_2\frac{V_{\operatorname{lca}(u,v)}^2}{d_ud_v}
-\ge \sum_{uv\in E}\frac{w_{uv}}{\vol(V)}
-\log_2\frac{(d_u+d_v)^2}{d_ud_v}.
-\label{eq:edge-bound}
-\end{equation}
-The inequality follows from
-$V_{\operatorname{lca}(u,v)}\ge d_u+d_v$. It is a universal lower bound, but
-the exact dynamic program gives the sharper certificates reported below.

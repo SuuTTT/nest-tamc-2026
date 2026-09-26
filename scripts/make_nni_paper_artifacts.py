@@ -66,7 +66,7 @@ def write_tables(records, output_dir):
             for regime in regimes}
 
     lines = [
-        r"\begin{table}[H]",
+        r"\begin{table}[t]",
         r"\centering\small",
         r"\caption{Mean tree structural entropy $H^T$ (bits) on paired graphs per",
         r"HSBM regime. The $\pm$ value is a 95\% $t$-interval over graph seeds; lower is",
@@ -287,7 +287,7 @@ def write_ablation(ablation_path, output_dir):
         ("Multi-start+NNI+compound", "+ two-move escape"),
     ]
     lines = [
-        r"\begin{table}[H]",
+        r"\begin{table}[t]",
         r"\centering\small",
         r"\caption{Cumulative \NEST ablation on 50 paired HSBMs (10 per regime). Each $+$ row adds one",
         r"component to the preceding row. The candidate pool selects the lowest-entropy",

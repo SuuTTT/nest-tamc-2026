@@ -2,17 +2,23 @@
 \usepackage{amsmath,amssymb,booktabs,graphicx,microtype,url,xspace,float}
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 \usepackage{tikz}
+\usepackage{marvosym}
 \usetikzlibrary{arrows.meta,positioning,calc}
 \newcommand{\vol}{\operatorname{vol}}
 \newcommand{\HT}{H^{T}}
-\newcommand{\NEST}{\textsc{Nest}\xspace}
+\newcommand{\NEST}{NEST\xspace}
 \ifdefined\withappendix
   \newcommand{\proofdetails}{Appendix~\ref{app:proofs}}
+  \newcommand{\ablationdetails}{Table~\ref{tab:ablation}}
 \else
+  \newcommand{\ablationdetails}{the supplementary appendix}
   \newcommand{\proofdetails}{the supplementary proof appendix}
 \fi
 \input{tables/result_macros}
+\input{tables/purity_macros}
+\input{tables/review3_macros}
 \emergencystretch=2em
+\raggedbottom
 \widowpenalty=10000
 \clubpenalty=10000
 \displaywidowpenalty=10000
@@ -24,9 +30,17 @@
 \title{NEST: Locally Certified Search for\\
 Structural-Entropy Hierarchies}
 \titlerunning{NEST: Certified Structural-Entropy Hierarchy Search}
-\author{Anonymous Authors}
-\authorrunning{Anonymous Authors}
-\institute{Affiliation withheld for review}
+% Author metadata from EasyChair submission 44 (retrieved 2026-09-26).
+% TODO(author): confirm affiliations, corresponding authors, and ORCIDs.
+\author{Dingli Su\inst{1}\textsuperscript{(\Letter)}\and
+Yicheng Pan\inst{2}\textsuperscript{(\Letter)}\and
+Angsheng Li\inst{2}}
+\authorrunning{D. Su et al.}
+\institute{Beihang University, Beijing, China\\
+\email{sudingli@buaa.edu.cn}\and
+State Key Laboratory of Software Development Environment, Beihang University,
+Beijing, China\\
+\email{yichengp@buaa.edu.cn, angsheng@buaa.edu.cn}}
 \maketitle
 
 \input{sections/abstract}
@@ -36,6 +50,11 @@ Structural-Entropy Hierarchies}
 \input{sections/experiments}
 \input{sections/related_work}
 \input{sections/conclusion}
+
+% TODO(author): funding and acknowledgements; remove if none.
+%\begin{credits}
+%\subsubsection{\ackname} This work was supported by ...
+%\end{credits}
 
 \bibliographystyle{splncs04}
 \bibliography{refs}

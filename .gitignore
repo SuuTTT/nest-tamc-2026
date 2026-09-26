@@ -14,3 +14,7 @@ __pycache__/
 *.out
 *.spl
 *.synctex.gz
+external/
+repro/
+.venv/
+*.egg-info/

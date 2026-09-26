@@ -1,0 +1,1130 @@
+{
+  "protocol": {
+    "version": "tamc-nni-v1",
+    "seeds": "0..9 unless overridden for smoke testing",
+    "primary_metric": "tree structural entropy H^T (lower is better)",
+    "secondary_metrics": [
+      "fine and coarse dendrogram purity (higher is better)",
+      "constructor and refinement wall time",
+      "Python allocation peak measured by tracemalloc"
+    ],
+    "compound": {
+      "rounds": 8,
+      "beam_width": 16,
+      "barrier_bits": 0.05
+    },
+    "selection": "HCSE target height 2..5 selected by minimum H^T; BBM receives oracle fine-k",
+    "actual_seeds": 3,
+    "seed_range": [
+      1000,
+      1002
+    ],
+    "size_multiplier": 1,
+    "vertices": 64,
+    "checkpointing": "atomic write after every graph"
+  },
+  "manifests": [
+    {
+      "dataset": "imbalanced",
+      "seed": 1000,
+      "regime": "imbalanced",
+      "sizes": [
+        4,
+        12,
+        6,
+        10,
+        5,
+        11,
+        7,
+        9
+      ],
+      "probabilities": [
+        0.38,
+        0.12,
+        0.025
+      ],
+      "connectors": [
+        [
+          0,
+          51,
+          0.01
+        ]
+      ]
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1001,
+      "regime": "imbalanced",
+      "sizes": [
+        4,
+        12,
+        6,
+        10,
+        5,
+        11,
+        7,
+        9
+      ],
+      "probabilities": [
+        0.38,
+        0.12,
+        0.025
+      ],
+      "connectors": []
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1002,
+      "regime": "imbalanced",
+      "sizes": [
+        4,
+        12,
+        6,
+        10,
+        5,
+        11,
+        7,
+        9
+      ],
+      "probabilities": [
+        0.38,
+        0.12,
+        0.025
+      ],
+      "connectors": []
+    }
+  ],
+  "records": [
+    {
+      "dataset": "imbalanced",
+      "seed": 1000,
+      "method": "SE-agglomerative",
+      "status": "ok",
+      "n": 64,
+      "m": 145,
+      "raw_h": 2.9829807465786895,
+      "nni1_h": 2.947152501440026,
+      "nni2_h": 2.945326000462081,
+      "nni1_gain": 0.03582824513866356,
+      "nni2_extra_gain": 0.0018265009779447894,
+      "nni1_moves": 13,
+      "compound_moves": 1,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6200382580853869,
+      "raw_coarse_purity": 0.785536589635854,
+      "final_fine_purity": 0.6417574181903738,
+      "final_coarse_purity": 0.7822032563025214,
+      "constructor_time_s": 0.10426391707733274,
+      "nni1_time_s": 0.07986716704908758,
+      "nni2_time_s": 0.21706712490413338,
+      "python_peak_mib": 0.7943115234375
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1000,
+      "method": "Louvain-2L",
+      "status": "ok",
+      "n": 64,
+      "m": 145,
+      "raw_h": 4.145942116343202,
+      "nni1_h": 4.145942116343202,
+      "nni2_h": 4.145942116343202,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.5164534120734909,
+      "raw_coarse_purity": 0.801458333333334,
+      "final_fine_purity": 0.5164534120734909,
+      "final_coarse_purity": 0.801458333333334,
+      "constructor_time_s": 0.015742875053547323,
+      "nni1_time_s": 0.0009774580830708146,
+      "nni2_time_s": 0.0032454999163746834,
+      "python_peak_mib": 0.12830829620361328
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1000,
+      "method": "Paris",
+      "status": "ok",
+      "n": 64,
+      "m": 145,
+      "raw_h": 3.030156153999381,
+      "nni1_h": 3.030156153999381,
+      "nni2_h": 3.030156153999381,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.4820451623451924,
+      "raw_coarse_purity": 0.5750201021243967,
+      "final_fine_purity": 0.4820451623451924,
+      "final_coarse_purity": 0.5750201021243967,
+      "constructor_time_s": 0.003968791919760406,
+      "nni1_time_s": 0.004068208043463528,
+      "nni2_time_s": 0.09802408306859434,
+      "python_peak_mib": 0.6298370361328125
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1000,
+      "method": "HCSE",
+      "status": "ok",
+      "n": 64,
+      "m": 145,
+      "raw_h": 3.282484710475081,
+      "nni1_h": 3.282484710475081,
+      "nni2_h": 3.282484710475081,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6083898835744312,
+      "raw_coarse_purity": 0.760267857142858,
+      "final_fine_purity": 0.6083898835744312,
+      "final_coarse_purity": 0.760267857142858,
+      "constructor_time_s": 0.22197533305734396,
+      "nni1_time_s": 0.002184749930165708,
+      "nni2_time_s": 0.06225079204887152,
+      "python_peak_mib": 0.9780607223510742,
+      "height_sweep": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1000,
+      "method": "BBM",
+      "status": "ok",
+      "n": 64,
+      "m": 145,
+      "raw_h": 3.382862723146999,
+      "nni1_h": 2.930123101097917,
+      "nni2_h": 2.9168623859982046,
+      "nni1_gain": 0.4527396220490818,
+      "nni2_extra_gain": 0.013260715099712606,
+      "nni1_moves": 85,
+      "compound_moves": 3,
+      "max_barrier": 0.0006443832044809028,
+      "raw_fine_purity": 0.5552671823212735,
+      "raw_coarse_purity": 0.6566406327023564,
+      "final_fine_purity": 0.6481258536376644,
+      "final_coarse_purity": 0.8006787469287479,
+      "constructor_time_s": 0.48521729197818786,
+      "nni1_time_s": 0.46917054196819663,
+      "nni2_time_s": 0.4459900420624763,
+      "python_peak_mib": 0.9298610687255859,
+      "oracle_k": 8
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1000,
+      "method": "se_hier",
+      "status": "ok",
+      "n": 64,
+      "m": 145,
+      "raw_h": 2.9829807465786895,
+      "nni1_h": 2.947152501440026,
+      "nni2_h": 2.945326000462081,
+      "nni1_gain": 0.03582824513866356,
+      "nni2_extra_gain": 0.0018265009779447894,
+      "nni1_moves": 13,
+      "compound_moves": 1,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6200382580853869,
+      "raw_coarse_purity": 0.785536589635854,
+      "final_fine_purity": 0.6417574181903738,
+      "final_coarse_purity": 0.7822032563025214,
+      "constructor_time_s": 20.12994562496897,
+      "nni1_time_s": 0.07976366602815688,
+      "nni2_time_s": 0.26741820899769664,
+      "python_peak_mib": 2.3959312438964844
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1000,
+      "method": "SE-NNI-fast",
+      "status": "ok",
+      "n": 64,
+      "m": 145,
+      "raw_h": 2.945326000462081,
+      "nni1_h": 2.945326000462081,
+      "nni2_h": 2.945326000462081,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6417574181903738,
+      "raw_coarse_purity": 0.7822032563025214,
+      "final_fine_purity": 0.6417574181903738,
+      "final_coarse_purity": 0.7822032563025214,
+      "constructor_time_s": 0.9064858329948038,
+      "nni1_time_s": 0.0039725829847157,
+      "nni2_time_s": 0.11023229197598994,
+      "python_peak_mib": 1.1770811080932617
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1001,
+      "method": "SE-agglomerative",
+      "status": "ok",
+      "n": 64,
+      "m": 166,
+      "raw_h": 3.3118293580326705,
+      "nni1_h": 3.251442594424456,
+      "nni2_h": 3.251442594424456,
+      "nni1_gain": 0.06038676360821471,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 12,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6722810964418928,
+      "raw_coarse_purity": 0.8971284983291558,
+      "final_fine_purity": 0.6753068190788363,
+      "final_coarse_purity": 0.9108279932786515,
+      "constructor_time_s": 0.12232529208995402,
+      "nni1_time_s": 0.09427441598381847,
+      "nni2_time_s": 0.10506924998480827,
+      "python_peak_mib": 0.5867843627929688
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1001,
+      "method": "Louvain-2L",
+      "status": "ok",
+      "n": 64,
+      "m": 166,
+      "raw_h": 4.478053583239746,
+      "nni1_h": 4.478053583239746,
+      "nni2_h": 4.478053583239746,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.5531886639170105,
+      "raw_coarse_purity": 0.8205729166666678,
+      "final_fine_purity": 0.5531886639170105,
+      "final_coarse_purity": 0.8205729166666678,
+      "constructor_time_s": 0.013276957906782627,
+      "nni1_time_s": 0.0024215419543907046,
+      "nni2_time_s": 0.007916959002614021,
+      "python_peak_mib": 0.1139984130859375
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1001,
+      "method": "Paris",
+      "status": "ok",
+      "n": 64,
+      "m": 166,
+      "raw_h": 3.270708077347969,
+      "nni1_h": 3.270402694360917,
+      "nni2_h": 3.270402694360917,
+      "nni1_gain": 0.00030538298705184985,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 2,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6270718854828986,
+      "raw_coarse_purity": 0.8297248924822451,
+      "final_fine_purity": 0.6246112555616387,
+      "final_coarse_purity": 0.8371033647044683,
+      "constructor_time_s": 0.0032870409777387977,
+      "nni1_time_s": 0.02082624996546656,
+      "nni2_time_s": 0.10760837502311915,
+      "python_peak_mib": 0.5286617279052734
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1001,
+      "method": "HCSE",
+      "status": "ok",
+      "n": 64,
+      "m": 166,
+      "raw_h": 3.745957795971324,
+      "nni1_h": 3.745957795971324,
+      "nni2_h": 3.745957795971324,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.5114046969897482,
+      "raw_coarse_purity": 0.6335553804855277,
+      "final_fine_purity": 0.5114046969897482,
+      "final_coarse_purity": 0.6335553804855277,
+      "constructor_time_s": 0.2595762909622863,
+      "nni1_time_s": 0.004137082956731319,
+      "nni2_time_s": 0.031444292049854994,
+      "python_peak_mib": 0.970402717590332,
+      "height_sweep": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1001,
+      "method": "BBM",
+      "status": "ok",
+      "n": 64,
+      "m": 166,
+      "raw_h": 3.81459540031258,
+      "nni1_h": 3.289610907269333,
+      "nni2_h": 3.26900420480609,
+      "nni1_gain": 0.524984493043247,
+      "nni2_extra_gain": 0.020606702463243032,
+      "nni1_moves": 78,
+      "compound_moves": 3,
+      "max_barrier": 0.0010643437780761822,
+      "raw_fine_purity": 0.47288502999624993,
+      "raw_coarse_purity": 0.5684011243386239,
+      "final_fine_purity": 0.604294316151657,
+      "final_coarse_purity": 0.7074743230625578,
+      "constructor_time_s": 0.32467416604049504,
+      "nni1_time_s": 0.4925905830459669,
+      "nni2_time_s": 0.6864389169495553,
+      "python_peak_mib": 1.199371337890625,
+      "oracle_k": 8
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1001,
+      "method": "se_hier",
+      "status": "ok",
+      "n": 64,
+      "m": 166,
+      "raw_h": 3.270708077347969,
+      "nni1_h": 3.270402694360917,
+      "nni2_h": 3.270402694360917,
+      "nni1_gain": 0.00030538298705184985,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 2,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6270718854828986,
+      "raw_coarse_purity": 0.8297248924822451,
+      "final_fine_purity": 0.6246112555616387,
+      "final_coarse_purity": 0.8371033647044683,
+      "constructor_time_s": 20.665647667017765,
+      "nni1_time_s": 0.017832875018939376,
+      "nni2_time_s": 0.124684082926251,
+      "python_peak_mib": 2.8919620513916016
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1001,
+      "method": "SE-NNI-fast",
+      "status": "ok",
+      "n": 64,
+      "m": 166,
+      "raw_h": 3.251442594424456,
+      "nni1_h": 3.251442594424456,
+      "nni2_h": 3.251442594424456,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6753068190788363,
+      "raw_coarse_purity": 0.9108279932786515,
+      "final_fine_purity": 0.6753068190788363,
+      "final_coarse_purity": 0.9108279932786515,
+      "constructor_time_s": 0.8717339170398191,
+      "nni1_time_s": 0.005409083911217749,
+      "nni2_time_s": 0.12601466698106378,
+      "python_peak_mib": 1.154597282409668
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1002,
+      "method": "SE-agglomerative",
+      "status": "ok",
+      "n": 64,
+      "m": 171,
+      "raw_h": 3.289951957128722,
+      "nni1_h": 3.2661522940379513,
+      "nni2_h": 3.2661522940379513,
+      "nni1_gain": 0.02379966309077064,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 10,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6022496600228499,
+      "raw_coarse_purity": 0.7184792681331289,
+      "final_fine_purity": 0.5953803756341762,
+      "final_coarse_purity": 0.7248963343272606,
+      "constructor_time_s": 0.12211520806886256,
+      "nni1_time_s": 0.06975487491581589,
+      "nni2_time_s": 0.11209720908664167,
+      "python_peak_mib": 0.5726547241210938
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1002,
+      "method": "Louvain-2L",
+      "status": "ok",
+      "n": 64,
+      "m": 171,
+      "raw_h": 4.307679133222066,
+      "nni1_h": 4.307679133222066,
+      "nni2_h": 4.307679133222066,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6556085914143733,
+      "raw_coarse_purity": 0.8517713903743331,
+      "final_fine_purity": 0.6556085914143733,
+      "final_coarse_purity": 0.8517713903743331,
+      "constructor_time_s": 0.020422875066287816,
+      "nni1_time_s": 0.001072874991223216,
+      "nni2_time_s": 0.004301458015106618,
+      "python_peak_mib": 0.1170501708984375
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1002,
+      "method": "Paris",
+      "status": "ok",
+      "n": 64,
+      "m": 171,
+      "raw_h": 3.3062057103577116,
+      "nni1_h": 3.3062057103577116,
+      "nni2_h": 3.3057564963398702,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0004492140178413706,
+      "nni1_moves": 0,
+      "compound_moves": 1,
+      "max_barrier": 0.0015382128996126454,
+      "raw_fine_purity": 0.6070547431571061,
+      "raw_coarse_purity": 0.7765869708994727,
+      "final_fine_purity": 0.6070547431571061,
+      "final_coarse_purity": 0.7765869708994727,
+      "constructor_time_s": 0.0033510420471429825,
+      "nni1_time_s": 0.004024542053230107,
+      "nni2_time_s": 0.20785420900210738,
+      "python_peak_mib": 0.7132949829101562
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1002,
+      "method": "HCSE",
+      "status": "ok",
+      "n": 64,
+      "m": 171,
+      "raw_h": 3.8817674583683193,
+      "nni1_h": 3.8817674583683193,
+      "nni2_h": 3.8817674583683193,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.5826726931687282,
+      "raw_coarse_purity": 0.7228043300653588,
+      "final_fine_purity": 0.5826726931687282,
+      "final_coarse_purity": 0.7228043300653588,
+      "constructor_time_s": 0.2681288750609383,
+      "nni1_time_s": 0.003261666977778077,
+      "nni2_time_s": 0.03853320796042681,
+      "python_peak_mib": 1.0844554901123047,
+      "height_sweep": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1002,
+      "method": "BBM",
+      "status": "ok",
+      "n": 64,
+      "m": 171,
+      "raw_h": 3.9377956938763283,
+      "nni1_h": 3.335989378647032,
+      "nni2_h": 3.31306937382825,
+      "nni1_gain": 0.6018063152292963,
+      "nni2_extra_gain": 0.02292000481878187,
+      "nni1_moves": 100,
+      "compound_moves": 1,
+      "max_barrier": 0.0007120123100308184,
+      "raw_fine_purity": 0.3872615316136622,
+      "raw_coarse_purity": 0.4686632570946292,
+      "final_fine_purity": 0.5931259458026841,
+      "final_coarse_purity": 0.6712150841611874,
+      "constructor_time_s": 0.5633214580593631,
+      "nni1_time_s": 0.6153259590500966,
+      "nni2_time_s": 0.4788013339275494,
+      "python_peak_mib": 0.9014263153076172,
+      "oracle_k": 8
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1002,
+      "method": "se_hier",
+      "status": "ok",
+      "n": 64,
+      "m": 171,
+      "raw_h": 3.288274130399355,
+      "nni1_h": 3.2731137343387653,
+      "nni2_h": 3.2731137343387653,
+      "nni1_gain": 0.015160396060589498,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 7,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6043971188632221,
+      "raw_coarse_purity": 0.7164590661129269,
+      "final_fine_purity": 0.5941097958202894,
+      "final_coarse_purity": 0.7280781525090788,
+      "constructor_time_s": 26.3448707080679,
+      "nni1_time_s": 0.06606920796912163,
+      "nni2_time_s": 0.14124154194723815,
+      "python_peak_mib": 3.0715885162353516
+    },
+    {
+      "dataset": "imbalanced",
+      "seed": 1002,
+      "method": "SE-NNI-fast",
+      "status": "ok",
+      "n": 64,
+      "m": 171,
+      "raw_h": 3.2661522940379513,
+      "nni1_h": 3.2661522940379513,
+      "nni2_h": 3.2661522940379513,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.5953803756341762,
+      "raw_coarse_purity": 0.7248963343272606,
+      "final_fine_purity": 0.5953803756341762,
+      "final_coarse_purity": 0.7248963343272606,
+      "constructor_time_s": 1.036185042001307,
+      "nni1_time_s": 0.00803599995560944,
+      "nni2_time_s": 0.15003429190255702,
+      "python_peak_mib": 1.1477079391479492
+    }
+  ],
+  "summary": [
+    {
+      "dataset": "imbalanced",
+      "method": "BBM",
+      "runs": 3,
+      "raw_h": {
+        "mean": 3.711751272445303,
+        "ci95": 0.7239049079147849,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 3.1852411290047606,
+        "ci95": 0.5518569194823918,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 3.1663119882108486,
+        "ci95": 0.5394313066790742,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.5265101434405417,
+        "ci95": 0.1851801862792176,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.018929140793912502,
+        "ci95": 0.012528560663811082,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.47180458131039527,
+        "ci95": 0.208687531528089,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.5645683380452031,
+        "ci95": 0.2336263982078318,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.6151820385306684,
+        "ci95": 0.07221770464190895,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.7264560513841644,
+        "ci95": 0.165906917583454,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.45773763869268197,
+        "ci95": 0.3022541423153399,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.5256956946880867,
+        "ci95": 0.19500580399685244,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.5370767643131936,
+        "ci95": 0.3239008349403519,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 1.0102195739746094,
+        "ci95": 0.40845695330851545,
+        "n": 3
+      },
+      "nni1_improved_rate": 1.0,
+      "compound_improved_rate": 1.0
+    },
+    {
+      "dataset": "imbalanced",
+      "method": "HCSE",
+      "runs": 3,
+      "raw_h": {
+        "mean": 3.6367366549382414,
+        "ci95": 0.7805566119884272,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 3.6367366549382414,
+        "ci95": 0.7805566119884272,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 3.6367366549382414,
+        "ci95": 0.7805566119884272,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.5674890912443026,
+        "ci95": 0.12481248106594993,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.7055425225645816,
+        "ci95": 0.16170745172049436,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.5674890912443026,
+        "ci95": 0.12481248106594993,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.7055425225645816,
+        "ci95": 0.16170745172049436,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.24989349969352284,
+        "ci95": 0.06099328040215262,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.0031944999548917017,
+        "ci95": 0.002429233452428257,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.044076097353051104,
+        "ci95": 0.04007883700690022,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 1.0109729766845703,
+        "ci95": 0.15837076561160807,
+        "n": 3
+      },
+      "nni1_improved_rate": 0.0,
+      "compound_improved_rate": 0.0
+    },
+    {
+      "dataset": "imbalanced",
+      "method": "Louvain-2L",
+      "runs": 3,
+      "raw_h": {
+        "mean": 4.310558277601672,
+        "ci95": 0.41255180998078783,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 4.310558277601672,
+        "ci95": 0.41255180998078783,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 4.310558277601672,
+        "ci95": 0.41255180998078783,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.575083555801625,
+        "ci95": 0.17914371986818015,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.8246008801247783,
+        "ci95": 0.06309021695122886,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.575083555801625,
+        "ci95": 0.17914371986818015,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.8246008801247783,
+        "ci95": 0.06309021695122886,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.016480902675539255,
+        "ci95": 0.009016614596995426,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.0014906250095615785,
+        "ci95": 0.0020062097714097123,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.005154638978031774,
+        "ci95": 0.006085666309650636,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 0.11978562672932942,
+        "ci95": 0.018722757844442998,
+        "n": 3
+      },
+      "nni1_improved_rate": 0.0,
+      "compound_improved_rate": 0.0
+    },
+    {
+      "dataset": "imbalanced",
+      "method": "Paris",
+      "runs": 3,
+      "raw_h": {
+        "mean": 3.2023566472350207,
+        "ci95": 0.3730739671026522,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 3.202254852906003,
+        "ci95": 0.37290155333728864,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 3.2021051149000557,
+        "ci95": 0.3725155355399642,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.00010179432901728329,
+        "ci95": 0.0004379856476192288,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.00014973800594712353,
+        "ci95": 0.0006442706400356323,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.5720572636617324,
+        "ci95": 0.1952349760080976,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.7271106551687049,
+        "ci95": 0.33378679037714587,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.5712370536879791,
+        "ci95": 0.19311599164276283,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.729570145909446,
+        "ci95": 0.340878057435516,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.0035356249815473952,
+        "ci95": 0.000935267890399818,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.00963966668738673,
+        "ci95": 0.02406605265341568,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.13782888903127363,
+        "ci95": 0.1511169338619157,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 0.6239312489827474,
+        "ci95": 0.22967889745224268,
+        "n": 3
+      },
+      "nni1_improved_rate": 0.3333333333333333,
+      "compound_improved_rate": 0.3333333333333333
+    },
+    {
+      "dataset": "imbalanced",
+      "method": "SE-NNI-fast",
+      "runs": 3,
+      "raw_h": {
+        "mean": 3.1543069629748293,
+        "ci95": 0.44995734226158224,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 3.1543069629748293,
+        "ci95": 0.44995734226158224,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 3.1543069629748293,
+        "ci95": 0.44995734226158224,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.6374815376344621,
+        "ci95": 0.0996994196875599,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.8059758613028113,
+        "ci95": 0.23653502233027665,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.6374815376344621,
+        "ci95": 0.0996994196875599,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.8059758613028113,
+        "ci95": 0.23653502233027665,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.9381349306786433,
+        "ci95": 0.2153088606795417,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.005805888950514297,
+        "ci95": 0.005118728387391634,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.1287604169532036,
+        "ci95": 0.04978847575033467,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 1.1597954432169597,
+        "ci95": 0.03815892827845582,
+        "n": 3
+      },
+      "nni1_improved_rate": 0.0,
+      "compound_improved_rate": 0.0
+    },
+    {
+      "dataset": "imbalanced",
+      "method": "SE-agglomerative",
+      "runs": 3,
+      "raw_h": {
+        "mean": 3.1949206872466935,
+        "ci95": 0.45676098222997374,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 3.1549157966341443,
+        "ci95": 0.44733991553223806,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 3.1543069629748293,
+        "ci95": 0.44995734226158224,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.04000489061254964,
+        "ci95": 0.0463234908644222,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.0006088336593149298,
+        "ci95": 0.0026195998062147367,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.6315230048500432,
+        "ci95": 0.09042483331921451,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.8003814520327129,
+        "ci95": 0.22418106687027778,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.6374815376344621,
+        "ci95": 0.0996994196875599,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.8059758613028113,
+        "ci95": 0.23653502233027665,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.1162348057453831,
+        "ci95": 0.025754610317628695,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.08129881931624065,
+        "ci95": 0.030610301960941395,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.1447445279918611,
+        "ci95": 0.15583418932490375,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 0.6512502034505209,
+        "ci95": 0.308271557616685,
+        "n": 3
+      },
+      "nni1_improved_rate": 1.0,
+      "compound_improved_rate": 0.3333333333333333
+    },
+    {
+      "dataset": "imbalanced",
+      "method": "se_hier",
+      "runs": 3,
+      "raw_h": {
+        "mean": 3.180654318108671,
+        "ci95": 0.4258196976085976,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 3.1635563100465696,
+        "ci95": 0.46556739636338956,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 3.1629474763872545,
+        "ci95": 0.4681869280343397,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.017098008062101638,
+        "ci95": 0.044318310979291876,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.0006088336593149298,
+        "ci95": 0.0026195998062147367,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.6171690874771691,
+        "ci95": 0.0288320933104501,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.7772401827436752,
+        "ci95": 0.14181162278557286,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.620159489857434,
+        "ci95": 0.059951545826505616,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.7824615911720229,
+        "ci95": 0.13541796101775164,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 22.380154666684877,
+        "ci95": 8.555311903298318,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.05455524967207263,
+        "ci95": 0.08081217820214374,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.17778127795706192,
+        "ci95": 0.19393181073484891,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 2.786493937174479,
+        "ci95": 0.8693446745072774,
+        "n": 3
+      },
+      "nni1_improved_rate": 1.0,
+      "compound_improved_rate": 0.3333333333333333
+    }
+  ]
+}

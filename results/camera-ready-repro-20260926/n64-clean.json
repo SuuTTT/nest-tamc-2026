@@ -1,0 +1,1124 @@
+{
+  "protocol": {
+    "version": "tamc-nni-v1",
+    "seeds": "0..9 unless overridden for smoke testing",
+    "primary_metric": "tree structural entropy H^T (lower is better)",
+    "secondary_metrics": [
+      "fine and coarse dendrogram purity (higher is better)",
+      "constructor and refinement wall time",
+      "Python allocation peak measured by tracemalloc"
+    ],
+    "compound": {
+      "rounds": 8,
+      "beam_width": 16,
+      "barrier_bits": 0.05
+    },
+    "selection": "HCSE target height 2..5 selected by minimum H^T; BBM receives oracle fine-k",
+    "actual_seeds": 3,
+    "seed_range": [
+      1000,
+      1002
+    ],
+    "size_multiplier": 1,
+    "vertices": 64,
+    "checkpointing": "atomic write after every graph"
+  },
+  "manifests": [
+    {
+      "dataset": "clean",
+      "seed": 1000,
+      "regime": "clean",
+      "sizes": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "probabilities": [
+        0.42,
+        0.12,
+        0.015
+      ],
+      "connectors": []
+    },
+    {
+      "dataset": "clean",
+      "seed": 1001,
+      "regime": "clean",
+      "sizes": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "probabilities": [
+        0.42,
+        0.12,
+        0.015
+      ],
+      "connectors": []
+    },
+    {
+      "dataset": "clean",
+      "seed": 1002,
+      "regime": "clean",
+      "sizes": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "probabilities": [
+        0.42,
+        0.12,
+        0.015
+      ],
+      "connectors": []
+    }
+  ],
+  "records": [
+    {
+      "dataset": "clean",
+      "seed": 1000,
+      "method": "SE-agglomerative",
+      "status": "ok",
+      "n": 64,
+      "m": 142,
+      "raw_h": 2.950053243399431,
+      "nni1_h": 2.886126521627729,
+      "nni2_h": 2.8484749505628817,
+      "nni1_gain": 0.06392672177170189,
+      "nni2_extra_gain": 0.03765157106484729,
+      "nni1_moves": 13,
+      "compound_moves": 1,
+      "max_barrier": 0.00030029280041610207,
+      "raw_fine_purity": 0.5765407899008211,
+      "raw_coarse_purity": 0.7533180366452406,
+      "final_fine_purity": 0.6110123238317519,
+      "final_coarse_purity": 0.744913466562176,
+      "constructor_time_s": 0.12813083291985095,
+      "nni1_time_s": 0.07708387507591397,
+      "nni2_time_s": 0.2453113329829648,
+      "python_peak_mib": 0.7776336669921875
+    },
+    {
+      "dataset": "clean",
+      "seed": 1000,
+      "method": "Louvain-2L",
+      "status": "ok",
+      "n": 64,
+      "m": 142,
+      "raw_h": 4.0163902319499325,
+      "nni1_h": 4.0163902319499325,
+      "nni2_h": 4.0163902319499325,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.4613505913729119,
+      "raw_coarse_purity": 0.7894923941799007,
+      "final_fine_purity": 0.4613505913729119,
+      "final_coarse_purity": 0.7894923941799007,
+      "constructor_time_s": 0.019355833996087313,
+      "nni1_time_s": 0.0014419169165194035,
+      "nni2_time_s": 0.007347041973844171,
+      "python_peak_mib": 0.12787342071533203
+    },
+    {
+      "dataset": "clean",
+      "seed": 1000,
+      "method": "Paris",
+      "status": "ok",
+      "n": 64,
+      "m": 142,
+      "raw_h": 2.8905856136217363,
+      "nni1_h": 2.8894635064617447,
+      "nni2_h": 2.8894635064617447,
+      "nni1_gain": 0.0011221071599916144,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 2,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.5644505296515842,
+      "raw_coarse_purity": 0.756710062283451,
+      "final_fine_purity": 0.5796308726221061,
+      "final_coarse_purity": 0.7620870464104343,
+      "constructor_time_s": 0.003945125034078956,
+      "nni1_time_s": 0.013496125000528991,
+      "nni2_time_s": 0.09309045795816928,
+      "python_peak_mib": 0.5525493621826172
+    },
+    {
+      "dataset": "clean",
+      "seed": 1000,
+      "method": "HCSE",
+      "status": "ok",
+      "n": 64,
+      "m": 142,
+      "raw_h": 3.2245977358228033,
+      "nni1_h": 3.2245977358228033,
+      "nni2_h": 3.224356780080987,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0002409557418161512,
+      "nni1_moves": 0,
+      "compound_moves": 1,
+      "max_barrier": 0.0010704443200357794,
+      "raw_fine_purity": 0.686509063852814,
+      "raw_coarse_purity": 0.8010677083333338,
+      "final_fine_purity": 0.686509063852814,
+      "final_coarse_purity": 0.8010677083333338,
+      "constructor_time_s": 0.29412225005216897,
+      "nni1_time_s": 0.0024293329333886504,
+      "nni2_time_s": 0.14656400005333126,
+      "python_peak_mib": 0.9811058044433594,
+      "height_sweep": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "dataset": "clean",
+      "seed": 1000,
+      "method": "BBM",
+      "status": "ok",
+      "n": 64,
+      "m": 142,
+      "raw_h": 3.319516311174947,
+      "nni1_h": 2.818742516418524,
+      "nni2_h": 2.8062759994112576,
+      "nni1_gain": 0.500773794756423,
+      "nni2_extra_gain": 0.012466517007266198,
+      "nni1_moves": 73,
+      "compound_moves": 4,
+      "max_barrier": 0.00031654975712447353,
+      "raw_fine_purity": 0.6375354996924543,
+      "raw_coarse_purity": 0.6179530075187964,
+      "final_fine_purity": 0.726212251094771,
+      "final_coarse_purity": 0.8688712231968854,
+      "constructor_time_s": 0.4566472909646109,
+      "nni1_time_s": 0.4379538339562714,
+      "nni2_time_s": 0.5684906659880653,
+      "python_peak_mib": 1.1602535247802734,
+      "oracle_k": 8
+    },
+    {
+      "dataset": "clean",
+      "seed": 1000,
+      "method": "se_hier",
+      "status": "ok",
+      "n": 64,
+      "m": 142,
+      "raw_h": 2.8905856136217363,
+      "nni1_h": 2.8894635064617447,
+      "nni2_h": 2.8894635064617447,
+      "nni1_gain": 0.0011221071599916144,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 2,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.5644505296515842,
+      "raw_coarse_purity": 0.756710062283451,
+      "final_fine_purity": 0.5796308726221061,
+      "final_coarse_purity": 0.7620870464104343,
+      "constructor_time_s": 21.14466662495397,
+      "nni1_time_s": 0.019828208023682237,
+      "nni2_time_s": 0.12432966707274318,
+      "python_peak_mib": 2.4584341049194336
+    },
+    {
+      "dataset": "clean",
+      "seed": 1000,
+      "method": "SE-NNI-fast",
+      "status": "ok",
+      "n": 64,
+      "m": 142,
+      "raw_h": 2.8484749505628817,
+      "nni1_h": 2.8484749505628817,
+      "nni2_h": 2.8484749505628817,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6110123238317519,
+      "raw_coarse_purity": 0.744913466562176,
+      "final_fine_purity": 0.6110123238317519,
+      "final_coarse_purity": 0.744913466562176,
+      "constructor_time_s": 0.7783072920283303,
+      "nni1_time_s": 0.0062861660262569785,
+      "nni2_time_s": 0.12762512499466538,
+      "python_peak_mib": 1.2650909423828125
+    },
+    {
+      "dataset": "clean",
+      "seed": 1001,
+      "method": "SE-agglomerative",
+      "status": "ok",
+      "n": 64,
+      "m": 154,
+      "raw_h": 3.045074716282397,
+      "nni1_h": 2.9773677826270313,
+      "nni2_h": 2.9741301926856294,
+      "nni1_gain": 0.06770693365536573,
+      "nni2_extra_gain": 0.003237589941401886,
+      "nni1_moves": 13,
+      "compound_moves": 1,
+      "max_barrier": 0.0004805232561286843,
+      "raw_fine_purity": 0.7108111969484158,
+      "raw_coarse_purity": 0.7346232166955834,
+      "final_fine_purity": 0.6973339904143481,
+      "final_coarse_purity": 0.7832784692159707,
+      "constructor_time_s": 0.11018704099114984,
+      "nni1_time_s": 0.10930112504865974,
+      "nni2_time_s": 0.23248216707725078,
+      "python_peak_mib": 0.7341461181640625
+    },
+    {
+      "dataset": "clean",
+      "seed": 1001,
+      "method": "Louvain-2L",
+      "status": "ok",
+      "n": 64,
+      "m": 154,
+      "raw_h": 4.252366367889556,
+      "nni1_h": 4.252366367889556,
+      "nni2_h": 4.252366367889556,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.45091500141723306,
+      "raw_coarse_purity": 0.8898003472222215,
+      "final_fine_purity": 0.45091500141723306,
+      "final_coarse_purity": 0.8898003472222215,
+      "constructor_time_s": 0.011807041009888053,
+      "nni1_time_s": 0.0009981669718399644,
+      "nni2_time_s": 0.007069125073030591,
+      "python_peak_mib": 0.1086273193359375
+    },
+    {
+      "dataset": "clean",
+      "seed": 1001,
+      "method": "Paris",
+      "status": "ok",
+      "n": 64,
+      "m": 154,
+      "raw_h": 2.9351779933586224,
+      "nni1_h": 2.9345626396922175,
+      "nni2_h": 2.9345626396922175,
+      "nni1_gain": 0.0006153536664048609,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 1,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6372808092392812,
+      "raw_coarse_purity": 0.7989652035056449,
+      "final_fine_purity": 0.636745550492925,
+      "final_coarse_purity": 0.7978491320770728,
+      "constructor_time_s": 0.0030812089098617435,
+      "nni1_time_s": 0.011091083055362105,
+      "nni2_time_s": 0.13198649999685585,
+      "python_peak_mib": 0.5140380859375
+    },
+    {
+      "dataset": "clean",
+      "seed": 1001,
+      "method": "HCSE",
+      "status": "ok",
+      "n": 64,
+      "m": 154,
+      "raw_h": 3.2562736582624545,
+      "nni1_h": 3.2562736582624545,
+      "nni2_h": 3.2562736582624545,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6926162131519289,
+      "raw_coarse_purity": 0.8544444444444494,
+      "final_fine_purity": 0.6926162131519289,
+      "final_coarse_purity": 0.8544444444444494,
+      "constructor_time_s": 0.3293945000041276,
+      "nni1_time_s": 0.001839415985159576,
+      "nni2_time_s": 0.021521750022657216,
+      "python_peak_mib": 1.056051254272461,
+      "height_sweep": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "dataset": "clean",
+      "seed": 1001,
+      "method": "BBM",
+      "status": "ok",
+      "n": 64,
+      "m": 154,
+      "raw_h": 3.3587839274453435,
+      "nni1_h": 2.845641343170267,
+      "nni2_h": 2.8451796399363225,
+      "nni1_gain": 0.5131425842750765,
+      "nni2_extra_gain": 0.0004617032339444549,
+      "nni1_moves": 82,
+      "compound_moves": 1,
+      "max_barrier": 0.00043117679040571844,
+      "raw_fine_purity": 0.6451910425101209,
+      "raw_coarse_purity": 0.7043703609986526,
+      "final_fine_purity": 0.7368806241902346,
+      "final_coarse_purity": 0.8759463949721306,
+      "constructor_time_s": 0.3891255840426311,
+      "nni1_time_s": 0.5635322079760954,
+      "nni2_time_s": 0.2283004579367116,
+      "python_peak_mib": 0.814239501953125,
+      "oracle_k": 8
+    },
+    {
+      "dataset": "clean",
+      "seed": 1001,
+      "method": "se_hier",
+      "status": "ok",
+      "n": 64,
+      "m": 154,
+      "raw_h": 2.9351779933586224,
+      "nni1_h": 2.9345626396922175,
+      "nni2_h": 2.9345626396922175,
+      "nni1_gain": 0.0006153536664048609,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 1,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.6372808092392812,
+      "raw_coarse_purity": 0.7989652035056449,
+      "final_fine_purity": 0.636745550492925,
+      "final_coarse_purity": 0.7978491320770728,
+      "constructor_time_s": 22.056360125076026,
+      "nni1_time_s": 0.011524916044436395,
+      "nni2_time_s": 0.11546954198274761,
+      "python_peak_mib": 3.2881622314453125
+    },
+    {
+      "dataset": "clean",
+      "seed": 1001,
+      "method": "SE-NNI-fast",
+      "status": "ok",
+      "n": 64,
+      "m": 154,
+      "raw_h": 2.9345626396922175,
+      "nni1_h": 2.9345626396922175,
+      "nni2_h": 2.9345626396922175,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.636745550492925,
+      "raw_coarse_purity": 0.7978491320770728,
+      "final_fine_purity": 0.636745550492925,
+      "final_coarse_purity": 0.7978491320770728,
+      "constructor_time_s": 1.1777738749515265,
+      "nni1_time_s": 0.004317666054703295,
+      "nni2_time_s": 0.1722409160574898,
+      "python_peak_mib": 1.2272520065307617
+    },
+    {
+      "dataset": "clean",
+      "seed": 1002,
+      "method": "SE-agglomerative",
+      "status": "ok",
+      "n": 64,
+      "m": 139,
+      "raw_h": 2.805400152707205,
+      "nni1_h": 2.738611093241653,
+      "nni2_h": 2.738611093241653,
+      "nni1_gain": 0.06678905946555203,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 10,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.8214657738095236,
+      "raw_coarse_purity": 0.9642054738562088,
+      "final_fine_purity": 0.8223958333333331,
+      "final_coarse_purity": 0.9720179738562088,
+      "constructor_time_s": 0.2842217499855906,
+      "nni1_time_s": 0.07454262499231845,
+      "nni2_time_s": 0.11408887500874698,
+      "python_peak_mib": 0.5616226196289062
+    },
+    {
+      "dataset": "clean",
+      "seed": 1002,
+      "method": "Louvain-2L",
+      "status": "ok",
+      "n": 64,
+      "m": 139,
+      "raw_h": 4.006183801386047,
+      "nni1_h": 4.006183801386047,
+      "nni2_h": 4.006183801386047,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.5657373366013065,
+      "raw_coarse_purity": 0.863419117647058,
+      "final_fine_purity": 0.5657373366013065,
+      "final_coarse_purity": 0.863419117647058,
+      "constructor_time_s": 0.017167584039270878,
+      "nni1_time_s": 0.0011637919815257192,
+      "nni2_time_s": 0.0032273329561576247,
+      "python_peak_mib": 0.1086273193359375
+    },
+    {
+      "dataset": "clean",
+      "seed": 1002,
+      "method": "Paris",
+      "status": "ok",
+      "n": 64,
+      "m": 139,
+      "raw_h": 2.7809332738982278,
+      "nni1_h": 2.77834510797177,
+      "nni2_h": 2.77834510797177,
+      "nni1_gain": 0.0025881659264577195,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 2,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.7343643673867385,
+      "raw_coarse_purity": 0.8705444395500141,
+      "final_fine_purity": 0.7322739478856047,
+      "final_coarse_purity": 0.8689075347881092,
+      "constructor_time_s": 0.005099166999571025,
+      "nni1_time_s": 0.014326208969578147,
+      "nni2_time_s": 0.09979237511288375,
+      "python_peak_mib": 0.5348720550537109
+    },
+    {
+      "dataset": "clean",
+      "seed": 1002,
+      "method": "HCSE",
+      "status": "ok",
+      "n": 64,
+      "m": 139,
+      "raw_h": 2.9973205956615088,
+      "nni1_h": 2.9973205956615088,
+      "nni2_h": 2.9973205956615088,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.7957093253968254,
+      "raw_coarse_purity": 0.9765625,
+      "final_fine_purity": 0.7957093253968254,
+      "final_coarse_purity": 0.9765625,
+      "constructor_time_s": 0.9806764590321109,
+      "nni1_time_s": 0.0018378749955445528,
+      "nni2_time_s": 0.03056570899207145,
+      "python_peak_mib": 0.8802585601806641,
+      "height_sweep": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "dataset": "clean",
+      "seed": 1002,
+      "method": "BBM",
+      "status": "ok",
+      "n": 64,
+      "m": 139,
+      "raw_h": 3.1906652309953896,
+      "nni1_h": 2.7640413019252543,
+      "nni2_h": 2.721632386928216,
+      "nni1_gain": 0.42662392907013524,
+      "nni2_extra_gain": 0.04240891499703814,
+      "nni1_moves": 67,
+      "compound_moves": 3,
+      "max_barrier": 6.901920784141424e-05,
+      "raw_fine_purity": 0.6996226615646252,
+      "raw_coarse_purity": 0.8415046296296309,
+      "final_fine_purity": 0.7757794784580501,
+      "final_coarse_purity": 0.9452380952380989,
+      "constructor_time_s": 0.3952492499956861,
+      "nni1_time_s": 0.3656714999815449,
+      "nni2_time_s": 0.5126438749721274,
+      "python_peak_mib": 1.2933330535888672,
+      "oracle_k": 8
+    },
+    {
+      "dataset": "clean",
+      "seed": 1002,
+      "method": "se_hier",
+      "status": "ok",
+      "n": 64,
+      "m": 139,
+      "raw_h": 2.77276797019168,
+      "nni1_h": 2.738611093241653,
+      "nni2_h": 2.738611093241653,
+      "nni1_gain": 0.03415687695002667,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 9,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.8253720238095236,
+      "raw_coarse_purity": 0.9720179738562088,
+      "final_fine_purity": 0.8223958333333331,
+      "final_coarse_purity": 0.9720179738562088,
+      "constructor_time_s": 22.992127749952488,
+      "nni1_time_s": 0.09869695804081857,
+      "nni2_time_s": 0.1391542920609936,
+      "python_peak_mib": 3.843449592590332
+    },
+    {
+      "dataset": "clean",
+      "seed": 1002,
+      "method": "SE-NNI-fast",
+      "status": "ok",
+      "n": 64,
+      "m": 139,
+      "raw_h": 2.738611093241653,
+      "nni1_h": 2.738611093241653,
+      "nni2_h": 2.738611093241653,
+      "nni1_gain": 0.0,
+      "nni2_extra_gain": 0.0,
+      "nni1_moves": 0,
+      "compound_moves": 0,
+      "max_barrier": 0.0,
+      "raw_fine_purity": 0.8223958333333331,
+      "raw_coarse_purity": 0.9720179738562088,
+      "final_fine_purity": 0.8223958333333331,
+      "final_coarse_purity": 0.9720179738562088,
+      "constructor_time_s": 0.9142873330274597,
+      "nni1_time_s": 0.005450541968457401,
+      "nni2_time_s": 0.1645856249378994,
+      "python_peak_mib": 1.2021379470825195
+    }
+  ],
+  "summary": [
+    {
+      "dataset": "clean",
+      "method": "BBM",
+      "runs": 3,
+      "raw_h": {
+        "mean": 3.2896551565385597,
+        "ci95": 0.21847338625155527,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 2.8094750538380153,
+        "ci95": 0.10329521586547079,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 2.7910293420919317,
+        "ci95": 0.1569205696353494,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.48018010270054495,
+        "ci95": 0.11623653151088628,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.01844571174608293,
+        "ci95": 0.05366572459269318,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.6607830679224,
+        "ci95": 0.08409594508795383,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.72127599938236,
+        "ci95": 0.28003827101766743,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.7462907845810186,
+        "ci95": 0.06480890323797663,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.8966852378023716,
+        "ci95": 0.10482206046709744,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.4136740416676427,
+        "ci95": 0.09276183799852478,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.45571918063797057,
+        "ci95": 0.24871070402195522,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.43647833296563476,
+        "ci95": 0.45319848048353084,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 1.0892753601074219,
+        "ci95": 0.6143463047268324,
+        "n": 3
+      },
+      "nni1_improved_rate": 1.0,
+      "compound_improved_rate": 1.0
+    },
+    {
+      "dataset": "clean",
+      "method": "HCSE",
+      "runs": 3,
+      "raw_h": {
+        "mean": 3.1593973299155884,
+        "ci95": 0.350892623891073,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 3.1593973299155884,
+        "ci95": 0.350892623891073,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 3.159317011334983,
+        "ci95": 0.35075462208667973,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 8.031858060538373e-05,
+        "ci95": 0.0003455829600913565,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.7249448674671894,
+        "ci95": 0.1524263073660196,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.8773582175925944,
+        "ci95": 0.223481100269202,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.7249448674671894,
+        "ci95": 0.1524263073660196,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.8773582175925944,
+        "ci95": 0.223481100269202,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.5347310696961358,
+        "ci95": 0.9603738741254648,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.002035541304697593,
+        "ci95": 0.0008471764752280943,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.06621715302268665,
+        "ci95": 0.1732169146076178,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 0.9724718729654948,
+        "ci95": 0.21913525393269861,
+        "n": 3
+      },
+      "nni1_improved_rate": 0.0,
+      "compound_improved_rate": 0.3333333333333333
+    },
+    {
+      "dataset": "clean",
+      "method": "Louvain-2L",
+      "runs": 3,
+      "raw_h": {
+        "mean": 4.091646800408512,
+        "ci95": 0.34599256372180326,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 4.091646800408512,
+        "ci95": 0.34599256372180326,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 4.091646800408512,
+        "ci95": 0.34599256372180326,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.4926676431304838,
+        "ci95": 0.1577302347548699,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.84757061968306,
+        "ci95": 0.12917044408890563,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.4926676431304838,
+        "ci95": 0.1577302347548699,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.84757061968306,
+        "ci95": 0.12917044408890563,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.01611015301508208,
+        "ci95": 0.009648145642368823,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.0012012919566283624,
+        "ci95": 0.0005570408905113695,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.005881166667677462,
+        "ci95": 0.005719688363818454,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 0.11504268646240234,
+        "ci95": 0.027603096879028927,
+        "n": 3
+      },
+      "nni1_improved_rate": 0.0,
+      "compound_improved_rate": 0.0
+    },
+    {
+      "dataset": "clean",
+      "method": "Paris",
+      "runs": 3,
+      "raw_h": {
+        "mean": 2.8688989602928623,
+        "ci95": 0.1971815752519021,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 2.8674570847085774,
+        "ci95": 0.19972515483964945,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 2.8674570847085774,
+        "ci95": 0.19972515483964945,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.0014418755842847315,
+        "ci95": 0.0025451029678489998,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.645365235425868,
+        "ci95": 0.21176012251409995,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.8087399017797035,
+        "ci95": 0.1429453419725114,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.6495501236668786,
+        "ci95": 0.19158395623115315,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.809614571091872,
+        "ci95": 0.13507116703526634,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.004041833647837241,
+        "ci95": 0.002515062929009256,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.012971139008489748,
+        "ci95": 0.004173955814373622,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.10828977768930297,
+        "ci95": 0.05165453080327034,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 0.533819834391276,
+        "ci95": 0.047887189594610836,
+        "n": 3
+      },
+      "nni1_improved_rate": 1.0,
+      "compound_improved_rate": 0.0
+    },
+    {
+      "dataset": "clean",
+      "method": "SE-NNI-fast",
+      "runs": 3,
+      "raw_h": {
+        "mean": 2.8405495611655844,
+        "ci95": 0.24398179546341173,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 2.8405495611655844,
+        "ci95": 0.24398179546341173,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 2.8405495611655844,
+        "ci95": 0.24398179546341173,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.6900512358860033,
+        "ci95": 0.2865048661698929,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.8382601908318192,
+        "ci95": 0.29517268729089563,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.6900512358860033,
+        "ci95": 0.2865048661698929,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.8382601908318192,
+        "ci95": 0.29517268729089563,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.9567895000024388,
+        "ci95": 0.5045198279962521,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.0053514580164725585,
+        "ci95": 0.002454286895416696,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.15481722199668488,
+        "ci95": 0.05926678196399646,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 1.231493631998698,
+        "ci95": 0.07872261193899689,
+        "n": 3
+      },
+      "nni1_improved_rate": 0.0,
+      "compound_improved_rate": 0.0
+    },
+    {
+      "dataset": "clean",
+      "method": "SE-agglomerative",
+      "runs": 3,
+      "raw_h": {
+        "mean": 2.933509370796344,
+        "ci95": 0.2998123587462516,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 2.8673684658321377,
+        "ci95": 0.2992853782182232,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 2.8537387454967216,
+        "ci95": 0.29275004026752166,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.06614090496420655,
+        "ci95": 0.004897960325361762,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.013629720335416392,
+        "ci95": 0.05183506070568724,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.7029392535529202,
+        "ci95": 0.3046847062341021,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.8173822423990109,
+        "ci95": 0.3167170374568794,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.7102473825264778,
+        "ci95": 0.2640185431101019,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.8334033032114517,
+        "ci95": 0.3019886895762149,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 0.1741798746321971,
+        "ci95": 0.23778279413089493,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.08697587503896405,
+        "ci95": 0.048132505056553414,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.19729412502298752,
+        "ci95": 0.17970950143414105,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 0.6911341349283854,
+        "ci95": 0.2838089684392836,
+        "n": 3
+      },
+      "nni1_improved_rate": 1.0,
+      "compound_improved_rate": 0.6666666666666666
+    },
+    {
+      "dataset": "clean",
+      "method": "se_hier",
+      "runs": 3,
+      "raw_h": {
+        "mean": 2.86617719239068,
+        "ci95": 0.20844686817017619,
+        "n": 3
+      },
+      "nni1_h": {
+        "mean": 2.854212413131872,
+        "ci95": 0.2549266590946808,
+        "n": 3
+      },
+      "nni2_h": {
+        "mean": 2.854212413131872,
+        "ci95": 0.2549266590946808,
+        "n": 3
+      },
+      "nni1_gain": {
+        "mean": 0.011964779258807715,
+        "ci95": 0.04774659373932118,
+        "n": 3
+      },
+      "nni2_extra_gain": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "n": 3
+      },
+      "raw_fine_purity": {
+        "mean": 0.6757011209001296,
+        "ci95": 0.3344566186529833,
+        "n": 3
+      },
+      "raw_coarse_purity": {
+        "mean": 0.8425644132151016,
+        "ci95": 0.28339909785198086,
+        "n": 3
+      },
+      "final_fine_purity": {
+        "mean": 0.6795907521494547,
+        "ci95": 0.3153044084902766,
+        "n": 3
+      },
+      "final_coarse_purity": {
+        "mean": 0.8439847174479053,
+        "ci95": 0.27899993899831127,
+        "n": 3
+      },
+      "constructor_time_s": {
+        "mean": 22.064384833327495,
+        "ci95": 2.2947388660545354,
+        "n": 3
+      },
+      "nni1_time_s": {
+        "mean": 0.04335002736964574,
+        "ci95": 0.11951512122490311,
+        "n": 3
+      },
+      "nni2_time_s": {
+        "mean": 0.1263178337054948,
+        "ci95": 0.029727402244705353,
+        "n": 3
+      },
+      "python_peak_mib": {
+        "mean": 3.1966819763183594,
+        "ci95": 1.7315053801255036,
+        "n": 3
+      },
+      "nni1_improved_rate": 1.0,
+      "compound_improved_rate": 0.0
+    }
+  ]
+}
