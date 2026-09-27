@@ -7,17 +7,12 @@ coalescent restart recovered the strict planted tree in the exact and sampled
 basin audits at $n=5$--$8$ and $n=12$. The exact solver is exponential, so the
 near-optimality measurements cover only the declared 12--16-vertex suites.
 
-We introduced \NEST, which derives an exact weighted NNI identity and uses it
-for monotone refinement, a local-optimality certificate, and safe bounded
-escape from shallow one-step traps. On the frozen five-regime suite, \NEST
-achieved the lowest mean entropy in every regime and outperformed both HCSE and
-BBM on all 500 paired graphs. Prior binary sufficiency together with our exact
-arbitrary-subset dynamic program shows that 32-start \NEST reaches the global
-optimum on \ScaleCombinedExact{} sealed instances across $n=12,14,16$, versus
-2/375 for HCSE and 1/375 for label-free BBM; this does not imply global
-optimality beyond the audited suites. The operator audit shows that
-construction quality and local certification are complementary views of
-search quality.
+We introduced \NEST, which uses an exact weighted NNI identity for monotone
+refinement, a local-optimality certificate, and bounded escape from shallow
+traps. It had the lowest entropy on all 500 paired graphs and reached the
+exact optimum on \ScaleCombinedExact{} sealed instances at $n=12,14,16$,
+versus 2/375 for HCSE and 1/375 for label-free BBM; this does not imply
+global optimality beyond the audited suites.
 
 \paragraph{Code and data availability.}
 The implementation, sealed per-graph records, verifiers, and table generators
