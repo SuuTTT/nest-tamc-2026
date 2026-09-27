@@ -3,10 +3,12 @@ TAMC 2026 submission 44 — camera-ready EasyChair fields
 Title:
 NEST: Locally Certified Search for Structural-Entropy Hierarchies
 
-Authors (order as in the PDF):
-Dingli Su (Beihang University) — corresponding
-Yicheng Pan (State Key Laboratory of Software Development Environment, Beihang University) — corresponding
-Angsheng Li (State Key Laboratory of Software Development Environment, Beihang University)
+Authors (order as in the PDF; affiliations as in the CIKM 2026 camera-ready):
+Dingli Su — State Key Laboratory of Complex & Critical Software Environment, Beihang University
+Yicheng Pan — State Key Laboratory of Complex & Critical Software Environment, Beihang University — sole corresponding author
+Angsheng Li — State Key Laboratory of Complex & Critical Software Environment, Beihang University; Zhongguancun Laboratory
+
+EasyChair still lists the old lab name ("Software Development Environment") and misspells "Beihang Univesity" for Dingli Su, and it marks Su as corresponding. Update all three to match the PDF.
 
 Abstract (plain text, matches the camera-ready PDF):
 Structural entropy evaluates a graph hierarchy through the description length of an encoding tree. HCSE and BBM construct such trees but do not determine whether the result admits a local entropy-reducing topology change. We introduce NNI-certified Entropy Search over Trees (NEST), a multi-start optimizer based on rooted nearest-neighbor interchange (NNI). For weighted graphs, we derive the exact NNI entropy change and prove that an improving rotation can be inaccessible to a monotone merge or compression. The formula supports best-improvement descent and a checkable one-NNI local-optimality certificate. Because a better tree may require a temporary increase, NEST also tests bounded two-move paths but commits only improving endpoints. We also formulate an O(3^n) subset dynamic program, using binary sufficiency, to compute exact global optima for audit graphs. Across 500 graphs from five 64-vertex hierarchical regimes, NEST lowers entropy by 0.4239 ± 0.0086 bits relative to the better of HCSE and BBM and wins all 500 paired comparisons. In sealed, candidate-budget-matched audits, 32 coalescent starts reach the exact global optimum on 249/250, 99/100, and 22/25 instances at n=12,14,16, respectively (370/375 overall), whereas 32-call HCSE and label-free BBM reach 2/375 and 1/375. These finite audits measure observed optimality on the declared suites; they do not establish an approximation ratio.
