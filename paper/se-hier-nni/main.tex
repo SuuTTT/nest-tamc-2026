@@ -7,13 +7,10 @@
 \newcommand{\vol}{\operatorname{vol}}
 \newcommand{\HT}{H^{T}}
 \newcommand{\NEST}{NEST\xspace}
-\ifdefined\withappendix
-  \newcommand{\proofdetails}{Appendix~\ref{app:proofs}}
-  \newcommand{\ablationdetails}{Table~\ref{tab:ablation}}
-\else
-  \newcommand{\ablationdetails}{the supplementary appendix}
-  \newcommand{\proofdetails}{the supplementary proof appendix}
-\fi
+% The proceedings version carries the proofs and the ablation table (within the
+% 14-page limit); \fullappendix adds the basin and audit analyses (extended version).
+\newcommand{\proofdetails}{Appendix~\ref{app:proofs}}
+\newcommand{\ablationdetails}{Table~\ref{tab:ablation}}
 \input{tables/result_macros}
 \input{tables/purity_macros}
 \input{tables/review3_macros}
@@ -56,8 +53,6 @@ Science Foundation of China (62576021).
 
 \bibliographystyle{splncs04}
 \bibliography{refs}
-\ifdefined\withappendix
 \appendix
 \input{sections/appendix}
-\fi
 \end{document}

@@ -1,8 +1,17 @@
+\ifdefined\fullappendix
 \section{Proof Details and Additional Basin Analysis}\label{app:proofs}
 
 This appendix supplies proofs omitted from the 12-page main paper, the
 component ablation, and additional finite-instance evidence; none of its claims
 is needed to interpret the main experimental tables.
+\else
+\section{Proofs and Component Ablation}\label{app:proofs}
+
+This appendix supplies the proofs omitted from the main text and the component
+ablation. Exact and sampled basin probabilities, the detailed 12-vertex audit,
+and runtime profiles are in the extended version at
+\url{https://github.com/SuuTTT/nest-tamc-2026}.
+\fi
 
 \paragraph{Proof of Theorem~\ref{thm:delta}.}
 First suppose the three child modules have positive volume; the zero-volume
@@ -58,6 +67,7 @@ change is
 Repeated insertion converts every multiway node to binary without increasing
 the objective.
 
+\ifdefined\fullappendix
 \subsection{Exact and sampled basin probabilities}\label{app:basin}
 The finite hit rates in the main paper do not supply a per-start probability.
 For a fixed graph $G$, deterministic refinement map $F$, optimum $H^*$, and
@@ -107,11 +117,15 @@ recovery misalignment on these small realized HSBMs. Thus the restart evidence
 supports optimization of $H^T$, not a claim that every entropy optimum equals
 the generator's planted hierarchy.
 
+\fi
+
 \paragraph{Component ablation.}
 Table~\ref{tab:ablation} gives the cumulative ablation summarized in
 Section~\ref{sec:experiments}.
 
 \input{tables/ablation}
+
+\ifdefined\fullappendix
 
 \paragraph{Refinement runtime.}
 Figure~\ref{fig:runtime} complements Table~\ref{tab:operator} with the
@@ -144,3 +158,4 @@ H^T(G)=\sum_{uv\in E}\frac{w_{uv}}{\vol(V)}
 The inequality follows from
 $V_{\operatorname{lca}(u,v)}\ge d_u+d_v$. It is a universal lower bound, but
 the exact dynamic program gives the sharper certificates reported below.
+\fi
